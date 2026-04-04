@@ -30,14 +30,14 @@ All scalar operations are defined within the finite field $\mathbb{Z}_n$, where 
   3. $s = k^{-1}(z + r \cdot d) \pmod n$
 
 ### 2.2 Phase Coordinate Transformation $(u_r, u_z)$
-[cite_start]To analyze structural concentrations, the signature is projected into **phase coordinates** derived from the verification equation[cite: 319, 324]:
-[cite_start]$$w = s^{-1} \pmod n$$ [cite: 318]
-[cite_start]$$u_z = z \cdot w \pmod n$$ [cite: 318]
-[cite_start]$$u_r = r \cdot w \pmod n$$ [cite: 318]
+To analyze structural concentrations, the signature is projected into **phase coordinates** derived from the verification equation:
+$$w = s^{-1} \pmod n$$
+$$u_z = z \cdot w \pmod n$$
+$$u_r = r \cdot w \pmod n$$
 
-[cite_start]The geometric verification condition is then represented as a point recovery on the curve[cite: 320, 323]:
-[cite_start]$$R' = u_z \cdot G + u_r \cdot Q$$ [cite: 320]
-[cite_start]$$\text{Valid if: } x(R') \pmod n = r$$ [cite: 321, 322]
+The geometric verification condition is then represented as a point recovery on the curve:
+$$R' = u_z \cdot G + u_r \cdot Q$$ 
+$$\text{Valid if: } x(R') \pmod n = r$$
 
 ---
 
