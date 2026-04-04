@@ -1,0 +1,95 @@
+{
+  "test_kind": "cross_address_defect_family_transfer",
+  "safety_scope": "synthetic_target_only",
+  "uses_real_addresses": true,
+  "uses_real_signatures_for_source": true,
+  "target_key_is_synthetic": true,
+  "prints_private_keys": false,
+  "source_address": "1boatslrhtknngkdxeeobr76b53lettpyt",
+  "source_d_redacted": "1d2f883681710df2703396bcb2439118669c2de1a2fa591457775f706eb12aab",
+  "target_d_redacted": "a8774f0da8512661f9db24eba199a8f8801c4211b432cec9cff67f56bb54af6d",
+  "claim_scope": "fixed-k portability from real donor to synthetic target, NOT to arbitrary real on-chain address",
+  "defect_families_transferred": 2,
+  "all_r_matched": true,
+  "all_signatures_ecdsa_verified": true,
+  "total_signatures_verified": 6,
+  "transfer_results": [
+    {
+      "k_hex": "0x8522b70f8dc857adcf41701bb1e081c7bbff78503c99b091b077a2dfb91497ad",
+      "source_r_hex": "0x6fcf15e8d272d1a995af6fcc9d6c0c2f4c0b6b0525142e8af866dd8dad4b",
+      "target_r_hex": "0x6fcf15e8d272d1a995af6fcc9d6c0c2f4c0b6b0525142e8af866dd8dad4b",
+      "r_match": true,
+      "family_size": 2
+    },
+    {
+      "k_hex": "0x7fffffffffffffffffffffffffffffff5d576e7357a4501ddfe92f46681b20a0",
+      "source_r_hex": "0x3b78ce563f89a0ed9414f5aa28ad0d96d6795f9c63",
+      "target_r_hex": "0x3b78ce563f89a0ed9414f5aa28ad0d96d6795f9c63",
+      "r_match": true,
+      "family_size": 4
+    }
+  ],
+  "verification_results": [
+    {
+      "sig_index": 0,
+      "family_index": 0,
+      "source_txid": "5511ba38cadef6e5fa58edcd7e5b24b6596b3e3cfe832c1b34f60731e955d74a",
+      "source_block": 505599,
+      "r_hex": "0x6fcf15e8d272d1a995af6fcc9d6c0c2f4c0b6b0525142e8af866dd8dad4b",
+      "s_hex": "0x76ad0f814c47c0a5f4680597977f0b61b3f84d0bbb10022193e53aa13f6c0469",
+      "z_hex": "0x1999d2a6b34e364498c60cd5aef3f6f2910d190cb7383cec85a94d140ddef397",
+      "ecdsa_verified": true
+    },
+    {
+      "sig_index": 1,
+      "family_index": 0,
+      "source_txid": "effb32b1b10f85a1223d989961779bf5f0b166966a6e9c05a996e72217a25f05",
+      "source_block": 480257,
+      "r_hex": "0x6fcf15e8d272d1a995af6fcc9d6c0c2f4c0b6b0525142e8af866dd8dad4b",
+      "s_hex": "0x32adb4c6b5c22279b72c6ef6cb062725bd5e4d47862b72b00f2d31dd3987590a",
+      "z_hex": "0xb34950d28098809314be3ffb1e7a531f1e590aead4b447f6a057e2a9ebb32153",
+      "ecdsa_verified": true
+    },
+    {
+      "sig_index": 2,
+      "family_index": 1,
+      "source_txid": "3d2dd08fceb73f428f6755540c75c3643608e8b428780df5e3dc8cba1f9e0fb8",
+      "source_block": 477411,
+      "r_hex": "0x3b78ce563f89a0ed9414f5aa28ad0d96d6795f9c63",
+      "s_hex": "0xc60780311a79858fbb2dd1a9d59f0262295fe6de0ba26d34a561e516398a08d6",
+      "z_hex": "0xf3013affce475c266d7ecf990a580ff28cbd465deb5457ba45a15f0f5f4cca27",
+      "ecdsa_verified": true
+    },
+    {
+      "sig_index": 3,
+      "family_index": 1,
+      "source_txid": "e6c31488a2c0f1697feb8a363145bdf281cece092ce7195677e4c06fc3ab574f",
+      "source_block": 455270,
+      "r_hex": "0x3b78ce563f89a0ed9414f5aa28ad0d96d6795f9c63",
+      "s_hex": "0xf5b14c5a5e625d125f63ae42188bcd95558ede87e394bea41267378cef7e0e77",
+      "z_hex": "0x5b2c54eb2c52f0651b63e14ce8e1aa59994e5c15a7b6dee4af35868d9c37a6b6",
+      "ecdsa_verified": true
+    },
+    {
+      "sig_index": 4,
+      "family_index": 1,
+      "source_txid": "447c11a306a0c1be9b56a52229e1b682542a7e96faa6f99d0c4e2209b0f31e55",
+      "source_block": 455194,
+      "r_hex": "0x3b78ce563f89a0ed9414f5aa28ad0d96d6795f9c63",
+      "s_hex": "0x53a5567e6579a0f0885f5ab762d48c3f13bb076b52590b6140653edd5199cf2b",
+      "z_hex": "0xac324fd928c74e7606e60b1243bd4b04ba3847a3f054b886183682e56b29c65c",
+      "ecdsa_verified": true
+    },
+    {
+      "sig_index": 5,
+      "family_index": 1,
+      "source_txid": "4a1f6e271fd9b81f37e176d71a570e8b138ac947408f8e62842513f7f9008544",
+      "source_block": 455175,
+      "r_hex": "0x3b78ce563f89a0ed9414f5aa28ad0d96d6795f9c63",
+      "s_hex": "0xc3549c189b94df4b4b22b1397c2bb15b1942fe94d0a1c8d5784eda8315cfd21",
+      "z_hex": "0xcfea563796a777f3f0bca2e4294633996b4bb364f2fc2ff00ca6ab7ffb482f61",
+      "ecdsa_verified": true
+    }
+  ],
+  "verdict": "DEMONSTRATED: fixed-k portability from real donor to synthetic target with full ECDSA verification"
+}

@@ -1,0 +1,77 @@
+[
+  {
+    "address": "rsz_from_address_1p5zedwtktfgxqjzphgwpqupe554wkdfhq",
+    "signature_count": 580,
+    "r_analysis": {
+      "bit_patterns": {
+        "low_8_bits": {
+          "unique_values": 222,
+          "entropy": -0.005607611629013337,
+          "max_frequency": 7
+        },
+        "low_16_bits": {
+          "unique_values": 579,
+          "entropy": -0.0017304506723678536,
+          "max_frequency": 2
+        },
+        "low_32_bits": {
+          "unique_values": 580,
+          "entropy": -0.001724504106483428,
+          "max_frequency": 1
+        }
+      }
+    },
+    "s_analysis": {},
+    "z_analysis": {}
+  },
+  {
+    "address": "rsz_from_address_1pvyalmnhdwfmcqxaqlgp7mzis9k6vfpd2",
+    "signature_count": 154,
+    "r_analysis": {
+      "bit_patterns": {
+        "low_8_bits": {
+          "unique_values": 116,
+          "entropy": -0.010206248793473307,
+          "max_frequency": 3
+        },
+        "low_16_bits": {
+          "unique_values": 154,
+          "entropy": -0.00649488559584666,
+          "max_frequency": 1
+        },
+        "low_32_bits": {
+          "unique_values": 154,
+          "entropy": -0.00649488559584666,
+          "max_frequency": 1
+        }
+      }
+    },
+    "s_analysis": {},
+    "z_analysis": {}
+  },
+  {
+    "address": "rsz_from_address_12wm7yfeqo78kiuawfuunkttzhvlm8zy9v",
+    "signature_count": 63,
+    "r_analysis": {
+      "bit_patterns": {
+        "low_8_bits": {
+          "unique_values": 56,
+          "entropy": -0.019404473014751684,
+          "max_frequency": 2
+        },
+        "low_16_bits": {
+          "unique_values": 63,
+          "entropy": -0.015876387012069552,
+          "max_frequency": 1
+        },
+        "low_32_bits": {
+          "unique_values": 63,
+          "entropy": -0.015876387012069552,
+          "max_frequency": 1
+        }
+      }
+    },
+    "s_analysis": {},
+    "z_analysis": {}
+  }
+]

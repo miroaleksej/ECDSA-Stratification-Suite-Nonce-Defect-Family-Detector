@@ -1,0 +1,254 @@
+{
+  "total_json_files": 333,
+  "categories": {
+    "d_bridge": 31,
+    "other": 232,
+    "thinning": 22,
+    "strict_raw": 36,
+    "source_bundle": 12
+  },
+  "d_bridge_results": [
+    {
+      "label": "12wm7yfeqo78kiuawfuunkttzhvlm8zy9v",
+      "samples": 63,
+      "stable_bridge": true,
+      "proof_bridge": true,
+      "best_core_size": 0
+    },
+    {
+      "label": "13c5muokkvyxvypxaejaczczyqytak2gpd",
+      "samples": 27,
+      "stable_bridge": false,
+      "proof_bridge": false,
+      "best_core_size": 0
+    },
+    {
+      "label": "13xsmwqrcqblxc8i6udrnbjvpjghwq9acq",
+      "samples": 74,
+      "stable_bridge": true,
+      "proof_bridge": false,
+      "best_core_size": 0
+    },
+    {
+      "label": "15z5yjaansxeynvr6uw6jqzlwq3n1hu6rx",
+      "samples": 60,
+      "stable_bridge": false,
+      "proof_bridge": false,
+      "best_core_size": 0
+    },
+    {
+      "label": "19blkkyrcjx4k8n8fxwjx1ztkuafp7kthl",
+      "samples": 22,
+      "stable_bridge": false,
+      "proof_bridge": false,
+      "best_core_size": 0
+    },
+    {
+      "label": "19dne9xg6jwvszgu3num6tnd2whmanpbhb",
+      "samples": 26,
+      "stable_bridge": false,
+      "proof_bridge": false,
+      "best_core_size": 0
+    },
+    {
+      "label": "1cr7ejvs8c7gfarrehcvfhd9gt3r46pflb",
+      "samples": 14,
+      "stable_bridge": false,
+      "proof_bridge": false,
+      "best_core_size": 0
+    },
+    {
+      "label": "1en7araqcvm26alwyecg5f6k9vowvjrthq",
+      "samples": 22,
+      "stable_bridge": true,
+      "proof_bridge": true,
+      "best_core_size": 0
+    },
+    {
+      "label": "1pajvudukm3xr4fjjzs53oonffzxvzk3v",
+      "samples": 80,
+      "stable_bridge": true,
+      "proof_bridge": false,
+      "best_core_size": 0
+    },
+    {
+      "label": "1pjigp2ydlvugqebsuzvcbadarnsk6xeiw",
+      "samples": 64,
+      "stable_bridge": true,
+      "proof_bridge": false,
+      "best_core_size": 0
+    },
+    {
+      "label": "19dne9xg6jwvszgu3num6tnd2whmanpbhb",
+      "samples": 26,
+      "stable_bridge": false,
+      "proof_bridge": false,
+      "best_core_size": 0
+    },
+    {
+      "label": "1pjigp2ydlvugqebsuzvcbadarnsk6xeiw",
+      "samples": 64,
+      "stable_bridge": true,
+      "proof_bridge": false,
+      "best_core_size": 0
+    },
+    {
+      "label": "1pajvudukm3xr4fjjzs53oonffzxvzk3v",
+      "samples": 80,
+      "stable_bridge": true,
+      "proof_bridge": false,
+      "best_core_size": 0
+    },
+    {
+      "label": "1cr7ejvs8c7gfarrehcvfhd9gt3r46pflb",
+      "samples": 14,
+      "stable_bridge": true,
+      "proof_bridge": true,
+      "best_core_size": 0
+    },
+    {
+      "label": "outputs",
+      "samples": 0,
+      "stable_bridge": false,
+      "proof_bridge": false,
+      "best_core_size": 0
+    },
+    {
+      "label": "1Fo65aKq8s8iquMt6weF1rku1moWVEd5Ua",
+      "samples": 11,
+      "stable_bridge": true,
+      "proof_bridge": true,
+      "best_core_size": 5
+    },
+    {
+      "label": "1en7araqcvm26alwyecg5f6k9vowvjrthq",
+      "samples": 22,
+      "stable_bridge": true,
+      "proof_bridge": true,
+      "best_core_size": 3
+    },
+    {
+      "label": "12wm7yfeqo78kiuawfuunkttzhvlm8zy9v",
+      "samples": 63,
+      "stable_bridge": true,
+      "proof_bridge": true,
+      "best_core_size": 0
+    },
+    {
+      "label": "1en7araqcvm26alwyecg5f6k9vowvjrthq",
+      "samples": 22,
+      "stable_bridge": false,
+      "proof_bridge": false,
+      "best_core_size": 0
+    },
+    {
+      "label": "19dne9xg6jwvszgu3num6tnd2whmanpbhb",
+      "samples": 26,
+      "stable_bridge": true,
+      "proof_bridge": false,
+      "best_core_size": 0
+    },
+    {
+      "label": "12wm7yfeqo78kiuawfuunkttzhvlm8zy9v",
+      "samples": 63,
+      "stable_bridge": true,
+      "proof_bridge": true,
+      "best_core_size": 4
+    },
+    {
+      "label": "19dne9xg6jwvszgu3num6tnd2whmanpbhb",
+      "samples": 26,
+      "stable_bridge": false,
+      "proof_bridge": false,
+      "best_core_size": 8
+    },
+    {
+      "label": "12wm7yFeqo78KiUawfuUnkttzhvLm8zY9V",
+      "samples": 63,
+      "stable_bridge": true,
+      "proof_bridge": true,
+      "best_core_size": 4
+    },
+    {
+      "label": "1Fo65aKq8s8iquMt6weF1rku1moWVEd5Ua",
+      "samples": 11,
+      "stable_bridge": true,
+      "proof_bridge": true,
+      "best_core_size": 5
+    }
+  ],
+  "thinning_results": [
+    {
+      "label": "1PJi_current_thin",
+      "samples": 64,
+      "strata": 2,
+      "claim_grade": 0
+    },
+    {
+      "label": "19d_current_thin",
+      "samples": 26,
+      "strata": 0,
+      "claim_grade": 0
+    },
+    {
+      "label": "1PJi_catalog",
+      "samples": 64,
+      "strata": 2,
+      "claim_grade": 0
+    },
+    {
+      "label": "control_thinning",
+      "samples": 63,
+      "strata": 2,
+      "claim_grade": 0
+    },
+    {
+      "label": "19d_thinning",
+      "samples": 26,
+      "strata": 1,
+      "claim_grade": 0
+    },
+    {
+      "label": "control_catalog",
+      "samples": 63,
+      "strata": 3,
+      "claim_grade": 0
+    },
+    {
+      "label": "19d_countfirst",
+      "samples": 26,
+      "strata": 1,
+      "claim_grade": 0
+    },
+    {
+      "label": "defect_countfirst",
+      "samples": 48,
+      "strata": 1,
+      "claim_grade": 1
+    },
+    {
+      "label": "1PJi_thinning",
+      "samples": 64,
+      "strata": 2,
+      "claim_grade": 0
+    },
+    {
+      "label": "defect_catalog",
+      "samples": 63,
+      "strata": 3,
+      "claim_grade": 0
+    }
+  ],
+  "puzzle_addresses": [
+    "1BgGZ9tcN4rm9KBzDn7KprQz87SZ26SAMH",
+    "1PitScNLyp2HCygzadCh7FveTnfmpPbfp8",
+    "19ZewH8Kk1PDbSNdJ97FP4EiCjTRaZMZQA",
+    "1EhqbyUMvvs7BfL8goY6qcPbD6YKfPqb7e",
+    "1CQFwcjw1dwhtkVWBttNLDtqL7ivBonGPV",
+    "14oFNXucftsHiUMY8uctg6N487riuyXs4h",
+    "1DBaumZxUkM4qMQRt2LVWyFJq5kDtSZQot",
+    "1LeBZP5QCwwgXRtmVUvTVrraqPUokyLHqe",
+    "1CUNEBjYrCn2y1SdiUMohaKUi4wpP326Lb",
+    "1HsMJxNiV7TLxmoF6uJNkydxPFDog4NQum"
+  ]
+}

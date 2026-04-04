@@ -1,0 +1,173 @@
+{
+  "test_kind": "synthetic_repeated_r_portability",
+  "safety_scope": "synthetic_only",
+  "uses_real_addresses": false,
+  "uses_real_signatures": false,
+  "prints_raw_r_values": false,
+  "prints_raw_ur_values": false,
+  "prints_raw_uz_values": false,
+  "prints_private_keys": false,
+  "procedure": [
+    "Construct synthetic repeated-r families with exact integer k values.",
+    "Instantiate a source signer corpus under one synthetic key.",
+    "Replay the same defect family under a second synthetic key while reusing source u_r values.",
+    "Replay the same defect family under the same target key with fresh u_r values.",
+    "Build a clean control corpus with no injected repeated-r family.",
+    "Compare exact repeated-r family sizes and the digest of the set of repeated-r values.",
+    "Compare a redacted digest of defect geometry based on defect-row (u_r, u_z) pairs."
+  ],
+  "digest_semantics": {
+    "repeated_r_set_digest": "SHA-256 digest of the sorted set of repeated-r values only; not a digest of the full corpus.",
+    "defect_ur_uz_geometry_digest": "SHA-256 digest of the sorted defect-row (u_r, u_z) pairs only; background rows are excluded."
+  },
+  "cases": [
+    {
+      "case_id": "case_00",
+      "requested_family_sizes": [
+        2,
+        4
+      ],
+      "requested_row_count": 72,
+      "profiles": {
+        "source_profile": {
+          "row_count": 72,
+          "repeated_family_count": 2,
+          "repeated_family_sizes": [
+            2,
+            4
+          ],
+          "repeated_row_count": 6,
+          "repeated_r_set_digest": "c01c2360bb816dbe9a647c4071a125202e900b3be97dfc2986cdd912b56e28ba"
+        },
+        "target_profile": {
+          "row_count": 72,
+          "repeated_family_count": 2,
+          "repeated_family_sizes": [
+            2,
+            4
+          ],
+          "repeated_row_count": 6,
+          "repeated_r_set_digest": "c01c2360bb816dbe9a647c4071a125202e900b3be97dfc2986cdd912b56e28ba"
+        },
+        "geometry_variant_profile": {
+          "row_count": 72,
+          "repeated_family_count": 2,
+          "repeated_family_sizes": [
+            2,
+            4
+          ],
+          "repeated_row_count": 6,
+          "repeated_r_set_digest": "c01c2360bb816dbe9a647c4071a125202e900b3be97dfc2986cdd912b56e28ba"
+        },
+        "control_profile": {
+          "row_count": 72,
+          "repeated_family_count": 0,
+          "repeated_family_sizes": [],
+          "repeated_row_count": 0,
+          "repeated_r_set_digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "source_geometry": {
+          "defect_row_count": 6,
+          "defect_family_sizes": [
+            2,
+            4
+          ],
+          "defect_ur_uz_geometry_digest": "b00d683f05ec66ae6d1bc03f8ff1bea2c8d082d59f872de49cbc2ca6eb8fcecb"
+        },
+        "target_geometry": {
+          "defect_row_count": 6,
+          "defect_family_sizes": [
+            2,
+            4
+          ],
+          "defect_ur_uz_geometry_digest": "905ff918496f192142a7384f17ce869c0e7b5ed9d24e0af4edfbdf16e7414725"
+        },
+        "geometry_variant_geometry": {
+          "defect_row_count": 6,
+          "defect_family_sizes": [
+            2,
+            4
+          ],
+          "defect_ur_uz_geometry_digest": "07b14596770ec7a28ec621279b30768744e55977ce2a1a90767fa4ab345631a6"
+        },
+        "control_geometry": {
+          "defect_row_count": 0,
+          "defect_family_sizes": [],
+          "defect_ur_uz_geometry_digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      "verdict": {
+        "portable_under_synthetic_replay": true,
+        "geometry_variant_preserves_repeated_r": true,
+        "geometry_variant_changes_defect_geometry": true,
+        "clean_control_has_no_repeated_r": true
+      }
+    }
+  ],
+  "aggregate_verdict": {
+    "portable_under_synthetic_replay": true,
+    "geometry_variant_preserves_repeated_r": true,
+    "geometry_variant_changes_defect_geometry": true,
+    "clean_control_has_no_repeated_r": true
+  },
+  "property_sweep": {
+    "cases": [
+      {
+        "case_id": "sweep_00",
+        "requested_family_sizes": [
+          2
+        ],
+        "requested_row_count": 24,
+        "verdict": {
+          "portable_under_synthetic_replay": true,
+          "geometry_variant_preserves_repeated_r": true,
+          "geometry_variant_changes_defect_geometry": true,
+          "clean_control_has_no_repeated_r": true
+        }
+      },
+      {
+        "case_id": "sweep_01",
+        "requested_family_sizes": [
+          2,
+          3
+        ],
+        "requested_row_count": 48,
+        "verdict": {
+          "portable_under_synthetic_replay": true,
+          "geometry_variant_preserves_repeated_r": true,
+          "geometry_variant_changes_defect_geometry": true,
+          "clean_control_has_no_repeated_r": true
+        }
+      },
+      {
+        "case_id": "sweep_02",
+        "requested_family_sizes": [
+          2,
+          4
+        ],
+        "requested_row_count": 72,
+        "verdict": {
+          "portable_under_synthetic_replay": true,
+          "geometry_variant_preserves_repeated_r": true,
+          "geometry_variant_changes_defect_geometry": true,
+          "clean_control_has_no_repeated_r": true
+        }
+      },
+      {
+        "case_id": "sweep_03",
+        "requested_family_sizes": [
+          3,
+          5
+        ],
+        "requested_row_count": 96,
+        "verdict": {
+          "portable_under_synthetic_replay": true,
+          "geometry_variant_preserves_repeated_r": true,
+          "geometry_variant_changes_defect_geometry": true,
+          "clean_control_has_no_repeated_r": true
+        }
+      }
+    ],
+    "all_cases_passed": true
+  }
+}

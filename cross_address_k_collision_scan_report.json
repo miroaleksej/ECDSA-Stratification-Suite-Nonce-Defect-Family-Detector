@@ -1,0 +1,103 @@
+{
+  "test_kind": "cross_address_k_collision_scan",
+  "safety_scope": "statistics_only_no_key_recovery",
+  "uses_real_addresses": true,
+  "prints_private_keys": false,
+  "date": "2026-04-03T10:41:41.004410",
+  "summary": {
+    "total_addresses_scanned": 30,
+    "total_signatures": 6257,
+    "unique_r_values": 6253,
+    "cross_address_r_collisions": 0,
+    "same_address_r_collisions": 2,
+    "recovered_keys_count": 7,
+    "donor_r_found_at_other_addresses": 0
+  },
+  "cross_address_collisions": [],
+  "same_address_collisions": [
+    {
+      "r_digest": "8866aa0b248225f7a32d60c78fa8846e15695c12566922e13ccc3fb0daef7b17",
+      "address": "1boatslrhtknngkdxeeobr76b53lettpyt",
+      "entry_count": 2
+    },
+    {
+      "r_digest": "e8d29ba813f0c80e5ef1f2288a4da386c5c5d70028e75ea20a761a3ba3b8fb9c",
+      "address": "1boatslrhtknngkdxeeobr76b53lettpyt",
+      "entry_count": 4
+    }
+  ],
+  "recovered_keys": [
+    {
+      "address": "1boatslrhtknngkdxeeobr76b53lettpyt",
+      "d_redacted": "fb0bb4a192281bcedf1f191382be2474ff70ae9ffed89b6f6e48b3dca99f69d0",
+      "k_redacted": "0f763c2390f499b3378b641248939659694f89952f655e976b1ad2642b122c47",
+      "r_redacted": "8866aa0b248225f7a32d60c78fa8846e15695c12566922e13ccc3fb0daef7b17",
+      "tx1": "5511ba38cadef6e5fa58edcd7e5b24b6596b3e3cfe832c1b34f60731e955d74a",
+      "tx2": "effb32b1b10f85a1223d989961779bf5f0b166966a6e9c05a996e72217a25f05",
+      "block1": 505599,
+      "block2": 480257
+    },
+    {
+      "address": "1boatslrhtknngkdxeeobr76b53lettpyt",
+      "d_redacted": "1d2f883681710df2703396bcb2439118669c2de1a2fa591457775f706eb12aab",
+      "k_redacted": "792c62db1c5cf367c9da272cd29c48813c0cad4a8b0111dd0b8b1bab6d288a45",
+      "r_redacted": "e8d29ba813f0c80e5ef1f2288a4da386c5c5d70028e75ea20a761a3ba3b8fb9c",
+      "tx1": "3d2dd08fceb73f428f6755540c75c3643608e8b428780df5e3dc8cba1f9e0fb8",
+      "tx2": "e6c31488a2c0f1697feb8a363145bdf281cece092ce7195677e4c06fc3ab574f",
+      "block1": 477411,
+      "block2": 455270
+    },
+    {
+      "address": "1boatslrhtknngkdxeeobr76b53lettpyt",
+      "d_redacted": "a254b4b2d8a9a458d516aa72d36ace4649e23f8091bdb5467c152d6fff186a2d",
+      "k_redacted": "a6e809286e3d84c2fd6859b8af9c52292dba1a32ed983c7d166ff4141c36480b",
+      "r_redacted": "e8d29ba813f0c80e5ef1f2288a4da386c5c5d70028e75ea20a761a3ba3b8fb9c",
+      "tx1": "3d2dd08fceb73f428f6755540c75c3643608e8b428780df5e3dc8cba1f9e0fb8",
+      "tx2": "447c11a306a0c1be9b56a52229e1b682542a7e96faa6f99d0c4e2209b0f31e55",
+      "block1": 477411,
+      "block2": 455194
+    },
+    {
+      "address": "1boatslrhtknngkdxeeobr76b53lettpyt",
+      "d_redacted": "1d2f883681710df2703396bcb2439118669c2de1a2fa591457775f706eb12aab",
+      "k_redacted": "792c62db1c5cf367c9da272cd29c48813c0cad4a8b0111dd0b8b1bab6d288a45",
+      "r_redacted": "e8d29ba813f0c80e5ef1f2288a4da386c5c5d70028e75ea20a761a3ba3b8fb9c",
+      "tx1": "3d2dd08fceb73f428f6755540c75c3643608e8b428780df5e3dc8cba1f9e0fb8",
+      "tx2": "4a1f6e271fd9b81f37e176d71a570e8b138ac947408f8e62842513f7f9008544",
+      "block1": 477411,
+      "block2": 455175
+    },
+    {
+      "address": "1boatslrhtknngkdxeeobr76b53lettpyt",
+      "d_redacted": "f94b598f4323fa89241a3866fca98dc2abad3623b8f7daf8847c6f4146239ae5",
+      "k_redacted": "23204aeaebb458caf8f5f15dfc87788dd74ba2bf2367ae2eeafbef4f14b91ef3",
+      "r_redacted": "e8d29ba813f0c80e5ef1f2288a4da386c5c5d70028e75ea20a761a3ba3b8fb9c",
+      "tx1": "e6c31488a2c0f1697feb8a363145bdf281cece092ce7195677e4c06fc3ab574f",
+      "tx2": "447c11a306a0c1be9b56a52229e1b682542a7e96faa6f99d0c4e2209b0f31e55",
+      "block1": 455270,
+      "block2": 455194
+    },
+    {
+      "address": "1boatslrhtknngkdxeeobr76b53lettpyt",
+      "d_redacted": "1d2f883681710df2703396bcb2439118669c2de1a2fa591457775f706eb12aab",
+      "k_redacted": "792c62db1c5cf367c9da272cd29c48813c0cad4a8b0111dd0b8b1bab6d288a45",
+      "r_redacted": "e8d29ba813f0c80e5ef1f2288a4da386c5c5d70028e75ea20a761a3ba3b8fb9c",
+      "tx1": "e6c31488a2c0f1697feb8a363145bdf281cece092ce7195677e4c06fc3ab574f",
+      "tx2": "4a1f6e271fd9b81f37e176d71a570e8b138ac947408f8e62842513f7f9008544",
+      "block1": 455270,
+      "block2": 455175
+    },
+    {
+      "address": "1boatslrhtknngkdxeeobr76b53lettpyt",
+      "d_redacted": "de76c87b6b47a53a58726ad87e872d83fac054d2b02ec359c6f704747dec871e",
+      "k_redacted": "18a66a4502111c13960e1198f1b0806558ed609b2ea2d21078522495b0feb3b9",
+      "r_redacted": "e8d29ba813f0c80e5ef1f2288a4da386c5c5d70028e75ea20a761a3ba3b8fb9c",
+      "tx1": "447c11a306a0c1be9b56a52229e1b682542a7e96faa6f99d0c4e2209b0f31e55",
+      "tx2": "4a1f6e271fd9b81f37e176d71a570e8b138ac947408f8e62842513f7f9008544",
+      "block1": 455194,
+      "block2": 455175
+    }
+  ],
+  "donor_r_at_other_addresses": [],
+  "verdict": "NO cross-address k-collisions found. Donor defect regime NOT present at other addresses."
+}

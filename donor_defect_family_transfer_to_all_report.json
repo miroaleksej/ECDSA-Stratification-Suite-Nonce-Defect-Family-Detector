@@ -1,0 +1,224 @@
+{
+  "test_kind": "donor_defect_family_transfer_to_all_addresses",
+  "safety_scope": "synthetic_targets_only",
+  "uses_real_addresses": true,
+  "donor_address": "1boatslrhtknngkdxeeobr76b53lettpyt",
+  "target_keys_are_synthetic": true,
+  "prints_private_keys": false,
+  "date": "2026-04-03T10:49:31.955843",
+  "summary": {
+    "donor_address": "1boatslrhtknngkdxeeobr76b53lettpyt",
+    "donor_defect_families": 2,
+    "target_addresses_count": 29,
+    "total_transfers_attempted": 58,
+    "total_transfers_successful": 58,
+    "all_r_matched": true,
+    "all_signatures_ecdsa_verified": true
+  },
+  "transfer_results": [
+    {
+      "address": "12vuufqhtgqwdvbzm8tbad1mzbm4hjgezn",
+      "families_transferred": 2,
+      "all_r_matched": true,
+      "all_signatures_verified": true,
+      "signatures_count": 6
+    },
+    {
+      "address": "12wm7yfeqo78kiuawfuunkttzhvlm8zy9v",
+      "families_transferred": 2,
+      "all_r_matched": true,
+      "all_signatures_verified": true,
+      "signatures_count": 6
+    },
+    {
+      "address": "13c5muokkvyxvypxaejaczczyqytak2gpd",
+      "families_transferred": 2,
+      "all_r_matched": true,
+      "all_signatures_verified": true,
+      "signatures_count": 6
+    },
+    {
+      "address": "13ntszgnn5tikqwryahnxh3k4gngexqw6b",
+      "families_transferred": 2,
+      "all_r_matched": true,
+      "all_signatures_verified": true,
+      "signatures_count": 6
+    },
+    {
+      "address": "13xsmwqrcqblxc8i6udrnbjvpjghwq9acq",
+      "families_transferred": 2,
+      "all_r_matched": true,
+      "all_signatures_verified": true,
+      "signatures_count": 6
+    },
+    {
+      "address": "15z5yjaansxeynvr6uw6jqzlwq3n1hu6rx",
+      "families_transferred": 2,
+      "all_r_matched": true,
+      "all_signatures_verified": true,
+      "signatures_count": 6
+    },
+    {
+      "address": "162bzzt2hjfv5gm3zmwfwfhjjctmd6rhhw",
+      "families_transferred": 2,
+      "all_r_matched": true,
+      "all_signatures_verified": true,
+      "signatures_count": 6
+    },
+    {
+      "address": "16mu5mpsaxmsf7gnmyxezby5vwyqeqas43",
+      "families_transferred": 2,
+      "all_r_matched": true,
+      "all_signatures_verified": true,
+      "signatures_count": 6
+    },
+    {
+      "address": "17ggghwtyi7e1rxnepckpe7fhq1uzbguab",
+      "families_transferred": 2,
+      "all_r_matched": true,
+      "all_signatures_verified": true,
+      "signatures_count": 6
+    },
+    {
+      "address": "19blkkyrcjx4k8n8fxwjx1ztkuafp7kthl",
+      "families_transferred": 2,
+      "all_r_matched": true,
+      "all_signatures_verified": true,
+      "signatures_count": 6
+    },
+    {
+      "address": "19dne9xg6jwvszgu3num6tnd2whmanpbhb",
+      "families_transferred": 2,
+      "all_r_matched": true,
+      "all_signatures_verified": true,
+      "signatures_count": 6
+    },
+    {
+      "address": "1av4kgcsvtpz9tg7hvwgb85wjyfd9xdpfv",
+      "families_transferred": 2,
+      "all_r_matched": true,
+      "all_signatures_verified": true,
+      "signatures_count": 6
+    },
+    {
+      "address": "1ay8vmc7r1ubycczrvulmv7iqphsabgujp",
+      "families_transferred": 2,
+      "all_r_matched": true,
+      "all_signatures_verified": true,
+      "signatures_count": 6
+    },
+    {
+      "address": "1cntkwbb4grh8xtb8mhoz6armne9phgza8",
+      "families_transferred": 2,
+      "all_r_matched": true,
+      "all_signatures_verified": true,
+      "signatures_count": 6
+    },
+    {
+      "address": "1cr7ejvs8c7gfarrehcvfhd9gt3r46pflb",
+      "families_transferred": 2,
+      "all_r_matched": true,
+      "all_signatures_verified": true,
+      "signatures_count": 6
+    },
+    {
+      "address": "1en7araqcvm26alwyecg5f6k9vowvjrthq",
+      "families_transferred": 2,
+      "all_r_matched": true,
+      "all_signatures_verified": true,
+      "signatures_count": 6
+    },
+    {
+      "address": "1ffmbhfnpazjkfvyi1oktjjjusn455paph",
+      "families_transferred": 2,
+      "all_r_matched": true,
+      "all_signatures_verified": true,
+      "signatures_count": 6
+    },
+    {
+      "address": "1fw9g6z1y1hughftfvchvnpinxyyuu36qu",
+      "families_transferred": 2,
+      "all_r_matched": true,
+      "all_signatures_verified": true,
+      "signatures_count": 6
+    },
+    {
+      "address": "1fxhxbz8higdcurkaina9rkzqfhhkgi1hu",
+      "families_transferred": 2,
+      "all_r_matched": true,
+      "all_signatures_verified": true,
+      "signatures_count": 6
+    },
+    {
+      "address": "1lqowist8kkauxspkzhnveyfrekphzsscd",
+      "families_transferred": 2,
+      "all_r_matched": true,
+      "all_signatures_verified": true,
+      "signatures_count": 6
+    },
+    {
+      "address": "1lvybnsx6f6ve2zn4zs2oz4ekybgzkqaay",
+      "families_transferred": 2,
+      "all_r_matched": true,
+      "all_signatures_verified": true,
+      "signatures_count": 6
+    },
+    {
+      "address": "1m1rdciqsa93satphbxxolu7ffmiakrrrz",
+      "families_transferred": 2,
+      "all_r_matched": true,
+      "all_signatures_verified": true,
+      "signatures_count": 6
+    },
+    {
+      "address": "1npzcfbnajeort9zqwzvrmw3srs546vsue",
+      "families_transferred": 2,
+      "all_r_matched": true,
+      "all_signatures_verified": true,
+      "signatures_count": 6
+    },
+    {
+      "address": "1p5zedwtktfgxqjzphgwpqupe554wkdfhq",
+      "families_transferred": 2,
+      "all_r_matched": true,
+      "all_signatures_verified": true,
+      "signatures_count": 6
+    },
+    {
+      "address": "1pajvudukm3xr4fjjzs53oonffzxvzk3v",
+      "families_transferred": 2,
+      "all_r_matched": true,
+      "all_signatures_verified": true,
+      "signatures_count": 6
+    },
+    {
+      "address": "1pjigp2ydlvugqebsuzvcbadarnsk6xeiw",
+      "families_transferred": 2,
+      "all_r_matched": true,
+      "all_signatures_verified": true,
+      "signatures_count": 6
+    },
+    {
+      "address": "1pvyalmnhdwfmcqxaqlgp7mzis9k6vfpd2",
+      "families_transferred": 2,
+      "all_r_matched": true,
+      "all_signatures_verified": true,
+      "signatures_count": 6
+    },
+    {
+      "address": "1pzaqw98perfyhypfqyegg5yycjrsenre7",
+      "families_transferred": 2,
+      "all_r_matched": true,
+      "all_signatures_verified": true,
+      "signatures_count": 6
+    },
+    {
+      "address": "1qhqjqxqcn2z4px4pjvberd1ayftfbd71t",
+      "families_transferred": 2,
+      "all_r_matched": true,
+      "all_signatures_verified": true,
+      "signatures_count": 6
+    }
+  ],
+  "verdict": "DEMONSTRATED: donor defect-family is portable to ALL target addresses with full ECDSA verification"
+}

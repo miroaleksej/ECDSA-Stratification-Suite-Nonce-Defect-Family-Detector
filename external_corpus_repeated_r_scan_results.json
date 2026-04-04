@@ -1,0 +1,244 @@
+{
+  "test_kind": "external_corpus_repeated_r_scan",
+  "safety_scope": "statistics_only_no_key_recovery",
+  "uses_real_addresses": true,
+  "prints_raw_r_values": false,
+  "prints_private_keys": false,
+  "date": "2026-04-03T10:06:48.772167",
+  "summary": {
+    "total_addresses_scanned": 30,
+    "addresses_with_repeated_r": 1,
+    "addresses_without_repeated_r": 29,
+    "total_signatures": 6257,
+    "total_duplicate_signatures": 6,
+    "overall_duplicate_ratio": 0.000958926002876778
+  },
+  "addresses": {
+    "12vuufqhtgqwdvbzm8tbad1mzbm4hjgezn": {
+      "total_signatures": 327,
+      "unique_r_values": 327,
+      "duplicate_r_groups": 0,
+      "total_duplicate_signatures": 0,
+      "duplicate_ratio": 0.0
+    },
+    "12wm7yfeqo78kiuawfuunkttzhvlm8zy9v": {
+      "total_signatures": 63,
+      "unique_r_values": 63,
+      "duplicate_r_groups": 0,
+      "total_duplicate_signatures": 0,
+      "duplicate_ratio": 0.0
+    },
+    "13c5muokkvyxvypxaejaczczyqytak2gpd": {
+      "total_signatures": 27,
+      "unique_r_values": 27,
+      "duplicate_r_groups": 0,
+      "total_duplicate_signatures": 0,
+      "duplicate_ratio": 0.0
+    },
+    "13ntszgnn5tikqwryahnxh3k4gngexqw6b": {
+      "total_signatures": 169,
+      "unique_r_values": 169,
+      "duplicate_r_groups": 0,
+      "total_duplicate_signatures": 0,
+      "duplicate_ratio": 0.0
+    },
+    "13xsmwqrcqblxc8i6udrnbjvpjghwq9acq": {
+      "total_signatures": 74,
+      "unique_r_values": 74,
+      "duplicate_r_groups": 0,
+      "total_duplicate_signatures": 0,
+      "duplicate_ratio": 0.0
+    },
+    "15z5yjaansxeynvr6uw6jqzlwq3n1hu6rx": {
+      "total_signatures": 60,
+      "unique_r_values": 60,
+      "duplicate_r_groups": 0,
+      "total_duplicate_signatures": 0,
+      "duplicate_ratio": 0.0
+    },
+    "162bzzt2hjfv5gm3zmwfwfhjjctmd6rhhw": {
+      "total_signatures": 713,
+      "unique_r_values": 713,
+      "duplicate_r_groups": 0,
+      "total_duplicate_signatures": 0,
+      "duplicate_ratio": 0.0
+    },
+    "16mu5mpsaxmsf7gnmyxezby5vwyqeqas43": {
+      "total_signatures": 325,
+      "unique_r_values": 325,
+      "duplicate_r_groups": 0,
+      "total_duplicate_signatures": 0,
+      "duplicate_ratio": 0.0
+    },
+    "17ggghwtyi7e1rxnepckpe7fhq1uzbguab": {
+      "total_signatures": 248,
+      "unique_r_values": 248,
+      "duplicate_r_groups": 0,
+      "total_duplicate_signatures": 0,
+      "duplicate_ratio": 0.0
+    },
+    "19blkkyrcjx4k8n8fxwjx1ztkuafp7kthl": {
+      "total_signatures": 22,
+      "unique_r_values": 22,
+      "duplicate_r_groups": 0,
+      "total_duplicate_signatures": 0,
+      "duplicate_ratio": 0.0
+    },
+    "19dne9xg6jwvszgu3num6tnd2whmanpbhb": {
+      "total_signatures": 26,
+      "unique_r_values": 26,
+      "duplicate_r_groups": 0,
+      "total_duplicate_signatures": 0,
+      "duplicate_ratio": 0.0
+    },
+    "1av4kgcsvtpz9tg7hvwgb85wjyfd9xdpfv": {
+      "total_signatures": 315,
+      "unique_r_values": 315,
+      "duplicate_r_groups": 0,
+      "total_duplicate_signatures": 0,
+      "duplicate_ratio": 0.0
+    },
+    "1ay8vmc7r1ubycczrvulmv7iqphsabgujp": {
+      "total_signatures": 799,
+      "unique_r_values": 799,
+      "duplicate_r_groups": 0,
+      "total_duplicate_signatures": 0,
+      "duplicate_ratio": 0.0
+    },
+    "1boatslrhtknngkdxeeobr76b53lettpyt": {
+      "total_signatures": 583,
+      "unique_r_values": 579,
+      "duplicate_r_groups": 2,
+      "total_duplicate_signatures": 6,
+      "duplicate_ratio": 0.010291595197255575,
+      "duplicate_r_group_digests": [
+        {
+          "sha256_digest": "2657d03873a57942621c432638e3fcd27d8cc11347e522db5f32e7bcaf7da6c5",
+          "count": 2,
+          "first_block": 480257,
+          "last_block": 505599,
+          "time_span_blocks": 25342
+        },
+        {
+          "sha256_digest": "cca16ce61c79e9aede1dff53330be2b2a944ae3c1b436c1e6d83a3f670c25d47",
+          "count": 4,
+          "first_block": 455175,
+          "last_block": 477411,
+          "time_span_blocks": 22236
+        }
+      ]
+    },
+    "1cntkwbb4grh8xtb8mhoz6armne9phgza8": {
+      "total_signatures": 13,
+      "unique_r_values": 13,
+      "duplicate_r_groups": 0,
+      "total_duplicate_signatures": 0,
+      "duplicate_ratio": 0.0
+    },
+    "1cr7ejvs8c7gfarrehcvfhd9gt3r46pflb": {
+      "total_signatures": 14,
+      "unique_r_values": 14,
+      "duplicate_r_groups": 0,
+      "total_duplicate_signatures": 0,
+      "duplicate_ratio": 0.0
+    },
+    "1en7araqcvm26alwyecg5f6k9vowvjrthq": {
+      "total_signatures": 22,
+      "unique_r_values": 22,
+      "duplicate_r_groups": 0,
+      "total_duplicate_signatures": 0,
+      "duplicate_ratio": 0.0
+    },
+    "1ffmbhfnpazjkfvyi1oktjjjusn455paph": {
+      "total_signatures": 830,
+      "unique_r_values": 830,
+      "duplicate_r_groups": 0,
+      "total_duplicate_signatures": 0,
+      "duplicate_ratio": 0.0
+    },
+    "1fw9g6z1y1hughftfvchvnpinxyyuu36qu": {
+      "total_signatures": 139,
+      "unique_r_values": 139,
+      "duplicate_r_groups": 0,
+      "total_duplicate_signatures": 0,
+      "duplicate_ratio": 0.0
+    },
+    "1fxhxbz8higdcurkaina9rkzqfhhkgi1hu": {
+      "total_signatures": 21,
+      "unique_r_values": 21,
+      "duplicate_r_groups": 0,
+      "total_duplicate_signatures": 0,
+      "duplicate_ratio": 0.0
+    },
+    "1lqowist8kkauxspkzhnveyfrekphzsscd": {
+      "total_signatures": 175,
+      "unique_r_values": 175,
+      "duplicate_r_groups": 0,
+      "total_duplicate_signatures": 0,
+      "duplicate_ratio": 0.0
+    },
+    "1lvybnsx6f6ve2zn4zs2oz4ekybgzkqaay": {
+      "total_signatures": 12,
+      "unique_r_values": 12,
+      "duplicate_r_groups": 0,
+      "total_duplicate_signatures": 0,
+      "duplicate_ratio": 0.0
+    },
+    "1m1rdciqsa93satphbxxolu7ffmiakrrrz": {
+      "total_signatures": 42,
+      "unique_r_values": 42,
+      "duplicate_r_groups": 0,
+      "total_duplicate_signatures": 0,
+      "duplicate_ratio": 0.0
+    },
+    "1npzcfbnajeort9zqwzvrmw3srs546vsue": {
+      "total_signatures": 74,
+      "unique_r_values": 74,
+      "duplicate_r_groups": 0,
+      "total_duplicate_signatures": 0,
+      "duplicate_ratio": 0.0
+    },
+    "1p5zedwtktfgxqjzphgwpqupe554wkdfhq": {
+      "total_signatures": 580,
+      "unique_r_values": 580,
+      "duplicate_r_groups": 0,
+      "total_duplicate_signatures": 0,
+      "duplicate_ratio": 0.0
+    },
+    "1pajvudukm3xr4fjjzs53oonffzxvzk3v": {
+      "total_signatures": 80,
+      "unique_r_values": 80,
+      "duplicate_r_groups": 0,
+      "total_duplicate_signatures": 0,
+      "duplicate_ratio": 0.0
+    },
+    "1pjigp2ydlvugqebsuzvcbadarnsk6xeiw": {
+      "total_signatures": 64,
+      "unique_r_values": 64,
+      "duplicate_r_groups": 0,
+      "total_duplicate_signatures": 0,
+      "duplicate_ratio": 0.0
+    },
+    "1pvyalmnhdwfmcqxaqlgp7mzis9k6vfpd2": {
+      "total_signatures": 154,
+      "unique_r_values": 154,
+      "duplicate_r_groups": 0,
+      "total_duplicate_signatures": 0,
+      "duplicate_ratio": 0.0
+    },
+    "1pzaqw98perfyhypfqyegg5yycjrsenre7": {
+      "total_signatures": 211,
+      "unique_r_values": 211,
+      "duplicate_r_groups": 0,
+      "total_duplicate_signatures": 0,
+      "duplicate_ratio": 0.0
+    },
+    "1qhqjqxqcn2z4px4pjvberd1ayftfbd71t": {
+      "total_signatures": 75,
+      "unique_r_values": 75,
+      "duplicate_r_groups": 0,
+      "total_duplicate_signatures": 0,
+      "duplicate_ratio": 0.0
+    }
+  }
+}
