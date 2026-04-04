@@ -44,17 +44,17 @@ $$\text{Valid if: } x(R') \pmod n = r$$
 ## 3. Toric Geometric Modeling
 
 ### 3.1 Modular Metric on $\mathbb{T}^2 \cong \mathbb{Z}_n \times \mathbb{Z}_n$
-[cite_start]Because the phase space is defined by modular arithmetic, standard Euclidean distances are invalid[cite: 350]. [cite_start]We implement a **toric metric** to find the shortest arc between points $a$ and $b$ modulo $m$[cite: 342, 344]:
-[cite_start]$$\Delta_t(a, b; m) = \min((a - b) \pmod m, (b - a) \pmod m)$$ [cite: 343]
+Because the phase space is defined by modular arithmetic, standard Euclidean distances are invalid. We implement a **toric metric** to find the shortest arc between points $a$ and $b$ modulo $m$:
+$$\Delta_t(a, b; m) = \min((a - b) \pmod m, (b - a) \pmod m)$$ 
 
-[cite_start]For a 2D phase point $(u_r, u_z)$, the **Toric $L_1$ Distance** is[cite: 345, 346]:
-[cite_start]$$L_1^t((a_0, a_1), (b_0, b_1)) = \Delta_t(a_0, b_0; m) + \Delta_t(a_1, b_1; m)$$ [cite: 345, 354]
+For a 2D phase point $(u_r, u_z)$, the **Toric $L_1$ Distance** is:
+$$L_1^t((a_0, a_1), (b_0, b_1)) = \Delta_t(a_0, b_0; m) + \Delta_t(a_1, b_1; m)$$
 
 ### 3.2 Synthetic Portability Theorem
-[cite_start]If a defect-family is characterized by a set of fixed nonces $\{k_i\}$, the resulting $r$-components are invariant across different long-term keys $d_{target}$ in a synthetic replay[cite: 374, 376]:
-[cite_start]$$R = u_z \cdot G + u_r \cdot Q = (k - d \cdot u_r) \cdot G + u_r(d \cdot G) = k \cdot G$$ [cite: 373]
-[cite_start]$$r = x(k \cdot G) \pmod n$$ [cite: 375]
-[cite_start]This proves that the signature's $r$-surface is purely a function of the nonce $k$, enabling **defect-family portability**[cite: 370, 377].
+If a defect-family is characterized by a set of fixed nonces $\{k_i\}$, the resulting $r$-components are invariant across different long-term keys $d_{target}$ in a synthetic replay:
+$$R = u_z \cdot G + u_r \cdot Q = (k - d \cdot u_r) \cdot G + u_r(d \cdot G) = k \cdot G$$
+$$r = x(k \cdot G) \pmod n$$
+This proves that the signature's $r$-surface is purely a function of the nonce $k$, enabling **defect-family portability**.
 
 ---
 
