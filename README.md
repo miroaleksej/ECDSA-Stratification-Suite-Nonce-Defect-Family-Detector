@@ -1,12 +1,6 @@
 # ECDSA Stratification Suite: Advanced Nonce-Defect Family Detector
 A Comprehensive R&D Framework for Phase-Space Analysis of secp256k1 Signatures
 
-Проблема в том, что стандартный GitHub Markdown не всегда корректно рендерит сложные LaTeX-формулы в одну строку или требует специфических разделителей. Для GitHub лучше всего использовать блоки `$$...$$` для выносных формул и `$ ... $` для строчных.
-
-[cite_start]Вот обновленная версия отчета в формате `.md`, оптимизированная специально для корректного отображения математики на GitHub[cite: 307, 318, 373].
-
----
-
 # Research Report: Stratified Analysis of ECDSA Signatures
 
 ## Mathematical Model and Experimental Validation
