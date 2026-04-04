@@ -63,32 +63,32 @@ This proves that the signature's $r$-surface is purely a function of the nonce $
 ### 4.1 Global Corpus Scan (Redacted)
 | Metric | Observed Value |
 | :--- | :--- |
-| **Total Address Contexts** | [cite_start]30 [cite: 399] |
-| **Total Signatures** | [cite_start]6257 [cite: 399] |
-| **Unique $r$-values** | [cite_start]6253 [cite: 399] |
-| **Repeated-r Contexts** | [cite_start]1 (Localised) [cite: 399, 402] |
-| **Cross-Address $r$-Collisions** | [cite_start]0 [cite: 399] |
+| **Total Address Contexts** | 30  |
+| **Total Signatures** | 6257  |
+| **Unique $r$-values** | 6253  |
+| **Repeated-r Contexts** | 1 (Localised)  |
+| **Cross-Address $r$-Collisions** | 0  |
 
 ### 4.2 Reconstructive Transfer Results
-[cite_start]The "Controlled Transfer" experiment validated the portability of real donor defect-families onto a panel of 29 real-world addresses[cite: 390, 413].
-* [cite_start]**Transfer Attempts:** 58 [cite: 411]
-* [cite_start]**Success Rate:** 100% (58/58) [cite: 411]
-* [cite_start]**Verification:** Every reconstructed signature passed full ECDSA validation against the target address's public key[cite: 411, 416].
+The "Controlled Transfer" experiment validated the portability of real donor defect-families onto a panel of 29 real-world addresses.
+* **Transfer Attempts:** 58 
+* **Success Rate:** 100% (58/58) 
+* **Verification:** Every reconstructed signature passed full ECDSA validation against the target address's public key.
 
 ---
 
 ## 5. Technical Architecture
 
 ### 5.1 Multi-Family Detection Ensemble
-[cite_start]The detector utilizes 23 distinct candidate methods to isolate strata[cite: 356]. [cite_start]Key families include[cite: 358, 359]:
+The detector utilizes 23 distinct candidate methods to isolate strata. Key families include:
 * **`ur_uz`**: Concentrations in the phase coefficient space.
 * **`rxy`**: Full geometry of the recovered verification point $R'$.
 * **`hybrid`**: Joint analysis of algebraic and geometric resultant vectors.
 
 ### 5.2 Permutation Significance Testing
-[cite_start]To prevent false positives, observed compactness is compared against a null distribution via **Permutation Tests**[cite: 361]. [cite_start]The adjusted p-value is calculated as[cite: 363]:
-[cite_start]$$p = \frac{1 + e}{B + 1}$$ [cite: 363]
-[cite_start]where $e$ is the number of permutations exceeding the observed metric and $B$ is the total permutations[cite: 364].
+To prevent false positives, observed compactness is compared against a null distribution via **Permutation Tests**. The adjusted p-value is calculated as:
+$$p = \frac{1 + e}{B + 1}$$ 
+where $e$ is the number of permutations exceeding the observed metric and $B$ is the total permutations.
 
 ---
 
