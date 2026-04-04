@@ -199,7 +199,7 @@ Blockchain R&D Labs: Investigating the topological and geometric properties of c
 📩 Contact & Licensing
 This system is offered as a complete Intellectual Property (IP) asset. It includes full source code, a massive database of verification results, and technical documentation.
 
-For licensing inquiries, acquisition of the technology stack, or partnership opportunities, please contact [Insert Your Contact Method Here] or open a private Inquiry Issue.
+For licensing inquiries, acquisition of the technology stack, or partnership opportunities, please contact [miro-aleksej@yandex.ru] or open a private Inquiry Issue.
 
 Note on Ethics: This project adheres to the highest standards of Responsible Disclosure. Operational steps for immediate exploitation are intentionally excluded from public documentation to prioritize network security and ethical research.
 +3
