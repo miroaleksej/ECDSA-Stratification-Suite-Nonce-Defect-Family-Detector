@@ -10,49 +10,49 @@ A Comprehensive R&D Framework for Phase-Space Analysis of secp256k1 Signatures
 ---
 
 ## 1. Executive Summary
-[cite_start]This study treats ECDSA signatures over the **secp256k1** curve as phase corpora where nonce defects manifest as "defect-families"[cite: 258, 284]. 
+[cite_start]This study treats ECDSA signatures over the **secp256k1** curve as phase corpora where nonce defects manifest as "defect-families" [cite: 258, 284]. 
 
-* [cite_start]**Object**: ECDSA signature sets and their phase coordinates[cite: 298].
-* [cite_start]**Core Result**: Proven transfer of a defect-family from a real donor to a panel of 29 real address targets with 100% success (58/58)[cite: 264, 411].
-* [cite_start]**Safety**: A "Publication Safety Gate" was used to remove 498 sensitive findings before release[cite: 265, 426].
+* [cite_start]**Object**: ECDSA signature sets and their phase coordinates [cite: 298].
+* [cite_start]**Core Result**: Proven transfer of a defect-family from a real donor to a panel of 29 real address targets with 100% success (58/58) [cite: 264, 411].
+* [cite_start]**Safety**: A "Publication Safety Gate" was used to remove 498 sensitive findings before release [cite: 265, 426].
 
 ---
 
 ## 2. Theoretical Framework
 
 ### 2.1 Standard ECDSA Scheme
-[cite_start]All scalar calculations are performed modulo $n$[cite: 306].
+[cite_start] All scalar calculations are performed modulo $n$[cite: 306].
 
-* [cite_start]**$G$**: Base point of the curve[cite: 306].
-* [cite_start]**$d$**: Private key (long-term secret)[cite: 306].
-* [cite_start]**$k$**: One-time secret scalar (nonce)[cite: 306].
-* [cite_start]**$R = k \cdot G$**: One-time point, where $r = x(R) \pmod n$[cite: 306, 310].
+* [cite_start] **$G$**: Base point of the curve[cite: 306].
+* [cite_start] **$d$**: Private key (long-term secret)[cite: 306].
+* [cite_start] **$k$**: One-time secret scalar (nonce)[cite: 306].
+* [cite_start] **$R = k \cdot G$**: One-time point, where $r = x(R) \pmod n$ [cite: 306, 310].
 
 The signature component $s$ is calculated as:
 [cite_start] $$s = k^{-1} \cdot (z + r \cdot d) \pmod n$$ [cite: 312]
 
 ### 2.2 Phase Coordinates $(u_r, u_z)$
 [cite_start]To analyze the corpus, we transition to phase coordinates[cite: 319]:
-[cite_start]$$w = s^{-1} \pmod n$$ [cite: 318]
-[cite_start]$$u_z = z \cdot w \pmod n$$ [cite: 318]
-[cite_start]$$u_r = r \cdot w \pmod n$$ [cite: 318]
+[cite_start] $$w = s^{-1} \pmod n$$ [cite: 318]
+[cite_start] $$u_z = z \cdot w \pmod n$$ [cite: 318]
+[cite_start] $$u_r = r \cdot w \pmod n$$ [cite: 318]
 
 In a valid signature, the following geometric condition must hold:
-[cite_start]$$x(u_z \cdot G + u_r \cdot Q) \pmod n = r$$ [cite: 320, 322]
+[cite_start] $$x(u_z \cdot G + u_r \cdot Q) \pmod n = r$$ [cite: 320, 322]
 
 ---
 
 ## 3. The Toric Geometric Model
 
 ### 3.1 Toric Distance
-[cite_start]Because calculations are modular, we use a toric metric to find the shortest path between points[cite: 342, 344]:
-[cite_start]$$\Delta_t(a, b; m) = \min((a - b) \pmod m, (b - a) \pmod m)$$ [cite: 343]
+[cite_start] Because calculations are modular, we use a toric metric to find the shortest path between points [cite: 342, 344]:
+[cite_start] $$\Delta_t(a, b; m) = \min((a - b) \pmod m, (b - a) \pmod m)$$ [cite: 343]
 
 ### 3.2 Synthetic Portability Theorem
-[cite_start]If a defect-family is defined by fixed values of $k$, the $r$ component is preserved even if the long-term key $d$ changes[cite: 374, 376]:
-[cite_start]$$R = u_z \cdot G + u_r \cdot Q$$ [cite: 373]
-[cite_start]$$R = (k - d \cdot u_r) \cdot G + u_r \cdot (d \cdot G) = k \cdot G$$ [cite: 373]
-[cite_start]$$r = x(k \cdot G) \pmod n$$ [cite: 375]
+[cite_start] If a defect-family is defined by fixed values of $k$, the $r$ component is preserved even if the long-term key $d$ changes [cite: 374, 376]:
+[cite_start] $$R = u_z \cdot G + u_r \cdot Q$$ [cite: 373]
+[cite_start] $$R = (k - d \cdot u_r) \cdot G + u_r \cdot (d \cdot G) = k \cdot G$$ [cite: 373]
+[cite_start] $$r = x(k \cdot G) \pmod n$$ [cite: 375]
 
 ---
 
@@ -68,9 +68,9 @@ In a valid signature, the following geometric condition must hold:
 
 ### 4.2 Controlled Transfer (Real Targets)
 [cite_start]The study performed a "Controlled Transfer" of donor defect-families to a panel of real-world addresses[cite: 390, 413].
-* [cite_start]**Attempts**: 58 [cite: 411]
-* [cite_start]**Successes**: 58 (100%) [cite: 411]
-* [cite_start]**Verification**: Full ECDSA validation and $r$ matching for all reconstructed signatures[cite: 411, 416].
+* [cite_start] **Attempts**: 58 [cite: 411]
+* [cite_start] **Successes**: 58 (100%) [cite: 411]
+* [cite_start] **Verification**: Full ECDSA validation and $r$ matching for all reconstructed signatures[cite: 411, 416].
 
 ---
 
