@@ -29,7 +29,7 @@ A Comprehensive R&D Framework for Phase-Space Analysis of secp256k1 Signatures
 * [cite_start]**$R = k \cdot G$**: One-time point, where $r = x(R) \pmod n$[cite: 306, 310].
 
 The signature component $s$ is calculated as:
-[cite_start]$$s = k^{-1} \cdot (z + r \cdot d) \pmod n$$ [cite: 312]
+[cite_start] $$s = k^{-1} \cdot (z + r \cdot d) \pmod n$$ [cite: 312]
 
 ### 2.2 Phase Coordinates $(u_r, u_z)$
 [cite_start]To analyze the corpus, we transition to phase coordinates[cite: 319]:
