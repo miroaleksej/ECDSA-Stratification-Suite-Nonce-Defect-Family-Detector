@@ -5,13 +5,9 @@ This document constitutes a formal proposal for the commercial licensing, integr
 
 ## 2. Mathematical and Architectural Foundation
 The system models state transitions as a chain complex over a finite field. Consensus topology is analyzed via homological algebra, where topological invariants (топологические инварианты) characterize structural resilience. Betti numbers are strictly non-negative integers:
-$$
-\beta_k \in \mathbb{Z}_{\geq 0}, \quad k = 0, 1, \dots, d
-$$
+$$\beta_k \in \mathbb{Z}_{\geq 0}, \quad k = 0, 1, \dots, d$$
 where $d$ denotes the dimension of the consensus graph complex. The security bound is formalized as:
-$$
-\Pr[\mathcal{A} \text{ succeeds}] \leq \mathsf{negl}(\lambda) + \sum_{k=0}^{d} \beta_k \cdot \Delta_k
-$$
+$$\Pr[\mathcal{A} \text{ succeeds}] \leq \mathsf{negl}(\lambda) + \sum_{k=0}^{d} \beta_k \cdot \Delta_k$$
 where:
 - $\lambda$ is the cryptographic security parameter,
 - $\mathsf{negl}(\cdot)$ denotes a negligible function,
