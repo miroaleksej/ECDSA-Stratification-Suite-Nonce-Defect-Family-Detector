@@ -1,0 +1,1938 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>mod 79 / p=67 / G(2,22) — d-Shift Observatory</title>
+  <style>
+    :root {
+      --bg: #0c1118;
+      --panel: #141c27;
+      --panel-2: #1b2635;
+      --text: #e5ebf3;
+      --muted: #9fb1c8;
+      --accent: #22c55e;
+      --accent-2: #f59e0b;
+      --accent-3: #60a5fa;
+      --border: #2a3a50;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: radial-gradient(circle at 20% 10%, #152338, #0c1118 52%);
+      color: var(--text);
+      font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
+    }
+
+    .wrap {
+      max-width: 1600px;
+      margin: 0 auto;
+      padding: 16px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .panel {
+      background: linear-gradient(180deg, var(--panel), var(--panel-2));
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px;
+    }
+
+    .top {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr;
+      gap: 12px;
+    }
+
+    .controls {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(120px, 1fr));
+      gap: 8px;
+      align-items: end;
+    }
+
+    label {
+      display: grid;
+      gap: 4px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    input, select, button {
+      width: 100%;
+      border: 1px solid var(--border);
+      background: #0f1724;
+      color: var(--text);
+      border-radius: 8px;
+      padding: 7px 9px;
+      font-size: 13px;
+    }
+
+    button {
+      cursor: pointer;
+      background: #132338;
+      border-color: #27507f;
+    }
+
+    .toggles {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 14px;
+      margin-top: 8px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .toggles label {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      width: auto;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(130px, 1fr));
+      gap: 8px;
+    }
+
+    .stat {
+      padding: 8px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: #0f1826;
+    }
+
+    .stat .k {
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 2px;
+    }
+
+    .stat .v {
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .mid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 12px;
+      align-items: start;
+    }
+
+    canvas {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #0a1019;
+      display: block;
+    }
+
+    #gridCanvas {
+      aspect-ratio: 1 / 1;
+      image-rendering: pixelated;
+    }
+
+    #sceneCanvas {
+      aspect-ratio: 1 / 1;
+    }
+
+    .tables {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .extras {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    #dscanCanvas {
+      width: 100%;
+      height: 170px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #0a1019;
+      display: block;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+
+    th, td {
+      border: 1px solid var(--border);
+      padding: 4px 6px;
+      text-align: center;
+    }
+
+    th {
+      background: #101c2c;
+      color: #c9d8ea;
+      position: sticky;
+      top: 0;
+    }
+
+    .small-note {
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 6px;
+      line-height: 1.35;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(100px, 1fr));
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .info-cell {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 6px;
+      background: #0e1724;
+      font-size: 12px;
+    }
+
+    .mono {
+      font-family: "IBM Plex Mono", "Consolas", monospace;
+    }
+
+    @media (max-width: 1100px) {
+      .top, .mid, .tables, .extras { grid-template-columns: 1fr; }
+      .controls { grid-template-columns: repeat(2, minmax(120px, 1fr)); }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="panel top">
+      <div>
+        <h2 style="margin:0 0 8px 0">Наблюдатель d-структуры: <span class="mono">mod 79, p=67, G(2,22)</span></h2>
+        <div class="controls">
+          <label>n (mod n)
+            <input id="nInput" type="number" min="3" value="79" />
+          </label>
+          <label>p (field p)
+            <input id="pInput" type="number" min="5" value="67" />
+          </label>
+          <label>a
+            <input id="aInput" type="number" value="0" />
+          </label>
+          <label>b
+            <input id="bInput" type="number" value="7" />
+          </label>
+          <label>Gx
+            <input id="gxInput" type="number" value="2" />
+          </label>
+          <label>Gy
+            <input id="gyInput" type="number" value="22" />
+          </label>
+          <label>d (секретный сдвиг)
+            <input id="dInput" type="number" min="0" value="14" />
+          </label>
+          <label>&nbsp;
+            <button id="rebuildBtn">Пересчитать</button>
+          </label>
+        </div>
+
+        <div class="toggles">
+          <label>Цвет:
+            <select id="colorMode" style="width:auto; min-width:120px;">
+              <option value="stratum">strata (по r)</option>
+              <option value="family">family (по t)</option>
+              <option value="sheet">лист y (±1)</option>
+              <option value="rval">raw r</option>
+            </select>
+          </label>
+          <label><input id="showFamily" type="checkbox" checked /> подсветить family выбранной точки</label>
+          <label><input id="showStratum" type="checkbox" checked /> подсветить stratum выбранной точки</label>
+          <label><input id="showLabels" type="checkbox" /> r-метки в ячейках</label>
+          <label><input id="showDAxis3D" type="checkbox" checked /> 3D: ось d (z=t)</label>
+          <label><input id="showTorus3D" type="checkbox" /> 3D: тор</label>
+          <label><input id="drawWire" type="checkbox" checked /> 3D: каркас</label>
+          <label><input id="autoRotate" type="checkbox" checked /> 3D: авто-вращение</label>
+        </div>
+
+        <div class="small-note">
+          Вычисление делается в raw-целых значениях по модулю: без нормализации, без дробных порогов.
+          Первая строка считается один раз при <span class="mono">u_r = 0</span>, далее каждая новая строка
+          в таблице <span class="mono">u_r × u_z</span> строится сдвигом на <span class="mono">u_r · d (mod n)</span>.
+        </div>
+      </div>
+
+      <div>
+        <div class="stats" id="statsBox"></div>
+        <div class="panel" style="margin-top:8px; padding:10px;">
+          <div style="font-size:13px; color:var(--muted); margin-bottom:6px;">Выбранная точка</div>
+          <div class="info-grid" id="selectedInfo"></div>
+          <div class="small-note" id="selectedNote"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="mid">
+      <div class="panel">
+        <h3 style="margin:0 0 8px 0">2D таблица <span class="mono">u_r × u_z</span></h3>
+        <canvas id="gridCanvas" width="900" height="900"></canvas>
+      </div>
+
+      <div class="panel">
+        <h3 style="margin:0 0 8px 0">3D представление</h3>
+        <div class="controls" style="grid-template-columns:repeat(2,minmax(100px,1fr)); margin-bottom:8px;">
+          <label>Поворот X
+            <input id="rotX" type="range" min="-180" max="180" value="28" />
+          </label>
+          <label>Поворот Y
+            <input id="rotY" type="range" min="-180" max="180" value="-36" />
+          </label>
+          <label>Плотность точек
+            <input id="zoom" type="range" min="30" max="300" value="115" />
+          </label>
+          <label>Масштаб сцены
+            <input id="viewScale" type="range" min="30" max="300" value="130" />
+          </label>
+          <label>Шаг прорисовки (точки)
+            <input id="step3d" type="number" min="1" value="1" />
+          </label>
+          <label>Слой 3D
+            <select id="layerMode3d">
+              <option value="all">все</option>
+              <option value="stratum">только stratum</option>
+              <option value="family">только family</option>
+            </select>
+          </label>
+          <label>Индекс stratum
+            <input id="stratumLayer" type="range" min="0" max="0" value="0" />
+          </label>
+          <label>Family t
+            <input id="familyLayer" type="range" min="0" max="78" value="0" />
+          </label>
+          <label>&nbsp;
+            <button id="resetViewBtn">Сбросить вид</button>
+          </label>
+        </div>
+        <div class="small-note" id="layer3dInfo" style="margin-bottom:8px;"></div>
+        <canvas id="sceneCanvas" width="900" height="900"></canvas>
+      </div>
+    </section>
+
+    <section class="extras">
+      <div class="panel">
+        <h3 style="margin:0 0 8px 0">d-scan (0..n-1)</h3>
+        <div class="controls" style="grid-template-columns:repeat(4,minmax(100px,1fr)); margin-bottom:8px;">
+          <label>Скорость (мс)
+            <input id="dscanSpeed" type="number" min="20" value="120" />
+          </label>
+          <label>&nbsp;
+            <button id="dscanStartBtn">Старт d-scan</button>
+          </label>
+          <label>&nbsp;
+            <button id="dscanStopBtn">Стоп</button>
+          </label>
+          <label>&nbsp;
+            <button id="dscanBestBtn">Применить лучший d</button>
+          </label>
+        </div>
+        <canvas id="dscanCanvas" width="1200" height="170"></canvas>
+        <div class="small-note" id="dscanInfo"></div>
+      </div>
+
+      <div class="panel">
+        <h3 style="margin:0 0 8px 0">Story Mode + Export</h3>
+        <div class="controls" style="grid-template-columns:repeat(4,minmax(100px,1fr)); margin-bottom:8px;">
+          <label><input id="storyMode" type="checkbox" /> Story mode</label>
+          <label>Шаг истории
+            <input id="storyStep" type="range" min="1" max="4" value="1" />
+          </label>
+          <label>&nbsp;
+            <button id="storyPlayBtn">Play 4 шага</button>
+          </label>
+          <label>&nbsp;
+            <button id="storyNextBtn">Следующий шаг</button>
+          </label>
+          <label>&nbsp;
+            <button id="export2dBtn">Экспорт 2D PNG</button>
+          </label>
+          <label>&nbsp;
+            <button id="export3dBtn">Экспорт 3D PNG</button>
+          </label>
+          <label>&nbsp;
+            <button id="exportGifBtn">Экспорт 3D GIF</button>
+          </label>
+          <label>GIF кадров
+            <input id="gifFrames" type="number" min="8" max="96" value="24" />
+          </label>
+        </div>
+        <div class="controls" style="grid-template-columns:repeat(4,minmax(100px,1fr)); margin-bottom:8px;">
+          <label><input id="presentationMode" type="checkbox" /> Режим выступления</label>
+          <label><input id="presentationAutoCamera" type="checkbox" checked /> Авто-камера</label>
+          <label>&nbsp;
+            <button id="presentationPlayBtn">Старт сцены</button>
+          </label>
+          <label>&nbsp;
+            <button id="presentationStopBtn">Стоп сцены</button>
+          </label>
+        </div>
+        <div class="small-note" id="storyInfo"></div>
+        <div class="small-note" id="presentationInfo"></div>
+        <div class="small-note" id="exportInfo"></div>
+      </div>
+    </section>
+
+    <section class="tables">
+      <div class="panel">
+        <h3 style="margin:0 0 8px 0">Первые строки: сдвиг от базовой строки</h3>
+        <div style="max-height:340px; overflow:auto;" id="shiftTableWrap"></div>
+      </div>
+
+      <div class="panel">
+        <h3 style="margin:0 0 8px 0">Strata/Families (точные инварианты)</h3>
+        <div style="max-height:340px; overflow:auto;" id="strataTableWrap"></div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    "use strict";
+
+    const el = {
+      n: document.getElementById("nInput"),
+      p: document.getElementById("pInput"),
+      a: document.getElementById("aInput"),
+      b: document.getElementById("bInput"),
+      gx: document.getElementById("gxInput"),
+      gy: document.getElementById("gyInput"),
+      d: document.getElementById("dInput"),
+      rebuild: document.getElementById("rebuildBtn"),
+      colorMode: document.getElementById("colorMode"),
+      showFamily: document.getElementById("showFamily"),
+      showStratum: document.getElementById("showStratum"),
+      showLabels: document.getElementById("showLabels"),
+      showDAxis3D: document.getElementById("showDAxis3D"),
+      showTorus3D: document.getElementById("showTorus3D"),
+      drawWire: document.getElementById("drawWire"),
+      autoRotate: document.getElementById("autoRotate"),
+      rotX: document.getElementById("rotX"),
+      rotY: document.getElementById("rotY"),
+      zoom: document.getElementById("zoom"),
+      viewScale: document.getElementById("viewScale"),
+      step3d: document.getElementById("step3d"),
+      layerMode3d: document.getElementById("layerMode3d"),
+      stratumLayer: document.getElementById("stratumLayer"),
+      familyLayer: document.getElementById("familyLayer"),
+      resetViewBtn: document.getElementById("resetViewBtn"),
+      layer3dInfo: document.getElementById("layer3dInfo"),
+      dscanCanvas: document.getElementById("dscanCanvas"),
+      dscanSpeed: document.getElementById("dscanSpeed"),
+      dscanStartBtn: document.getElementById("dscanStartBtn"),
+      dscanStopBtn: document.getElementById("dscanStopBtn"),
+      dscanBestBtn: document.getElementById("dscanBestBtn"),
+      dscanInfo: document.getElementById("dscanInfo"),
+      storyMode: document.getElementById("storyMode"),
+      storyStep: document.getElementById("storyStep"),
+      storyPlayBtn: document.getElementById("storyPlayBtn"),
+      storyNextBtn: document.getElementById("storyNextBtn"),
+      storyInfo: document.getElementById("storyInfo"),
+      presentationMode: document.getElementById("presentationMode"),
+      presentationAutoCamera: document.getElementById("presentationAutoCamera"),
+      presentationPlayBtn: document.getElementById("presentationPlayBtn"),
+      presentationStopBtn: document.getElementById("presentationStopBtn"),
+      presentationInfo: document.getElementById("presentationInfo"),
+      export2dBtn: document.getElementById("export2dBtn"),
+      export3dBtn: document.getElementById("export3dBtn"),
+      exportGifBtn: document.getElementById("exportGifBtn"),
+      gifFrames: document.getElementById("gifFrames"),
+      exportInfo: document.getElementById("exportInfo"),
+      statsBox: document.getElementById("statsBox"),
+      selectedInfo: document.getElementById("selectedInfo"),
+      selectedNote: document.getElementById("selectedNote"),
+      shiftTableWrap: document.getElementById("shiftTableWrap"),
+      strataTableWrap: document.getElementById("strataTableWrap"),
+      gridCanvas: document.getElementById("gridCanvas"),
+      sceneCanvas: document.getElementById("sceneCanvas"),
+    };
+
+    const gridCtx = el.gridCanvas.getContext("2d");
+    const sceneCtx = el.sceneCanvas.getContext("2d");
+    const dscanCtx = el.dscanCanvas.getContext("2d");
+
+    const state = {
+      n: 79,
+      p: 67,
+      a: 0,
+      b: 7,
+      G: { x: 2, y: 22 },
+      d: 14,
+      Q: null,
+      pointsByT: [],
+      row0R: [],
+      row0Y: [],
+      rToT: new Map(),
+      stratumColorKeys: [],
+      verifyMismatches: 0,
+      verifyChecks: 0,
+      dscan: {
+        scores: [],
+        running: false,
+        timer: null,
+        cursor: 0,
+        bestD: 0,
+        bestScore: -1,
+      },
+      story: {
+        enabled: false,
+        step: 1,
+        playing: false,
+        timer: null,
+      },
+      presentation: {
+        enabled: false,
+        autoCamera: true,
+        playing: false,
+        timer: null,
+        targets: null,
+      },
+      isDragging3D: false,
+      lastDragX: 0,
+      lastDragY: 0,
+      selected: { ur: 0, uz: 0 },
+      anchor: { ur: 0, uz: 0 },
+      valid: true,
+      msg: "",
+    };
+
+    function mod(x, m) {
+      let v = x % m;
+      if (v < 0) v += m;
+      return v;
+    }
+
+    function pointAdd(p1, p2) {
+      const p = state.p;
+      const a = state.a;
+      if (!p1) return p2;
+      if (!p2) return p1;
+
+      const x1 = p1.x, y1 = p1.y;
+      const x2 = p2.x, y2 = p2.y;
+
+      if (x1 === x2 && mod(y1 + y2, p) === 0) return null;
+
+      let m;
+      if (x1 === x2 && y1 === y2) {
+        const den = mod(2 * y1, p);
+        if (den === 0) return null;
+        m = mod((3 * x1 * x1 + a) * inv(den, p), p);
+      } else {
+        const den = mod(x2 - x1, p);
+        if (den === 0) return null;
+        m = mod((y2 - y1) * inv(den, p), p);
+      }
+
+      const x3 = mod(m * m - x1 - x2, p);
+      const y3 = mod(m * (x1 - x3) - y1, p);
+      return { x: x3, y: y3 };
+    }
+
+    function scalarMul(k, P) {
+      let n = k;
+      let result = null;
+      let cur = P;
+      while (n > 0) {
+        if (n & 1) result = pointAdd(result, cur);
+        cur = pointAdd(cur, cur);
+        n >>= 1;
+      }
+      return result;
+    }
+
+    function inv(a, p) {
+      const [g, x] = egcd(a, p);
+      if (g !== 1) throw new Error("inverse does not exist");
+      return mod(x, p);
+    }
+
+    function egcd(a, b) {
+      let oldR = a, r = b;
+      let oldS = 1, s = 0;
+      let oldT = 0, t = 1;
+      while (r !== 0) {
+        const q = Math.floor(oldR / r);
+        [oldR, r] = [r, oldR - q * r];
+        [oldS, s] = [s, oldS - q * s];
+        [oldT, t] = [t, oldT - q * t];
+      }
+      return [Math.abs(oldR), oldS, oldT];
+    }
+
+    function isOnCurve(P) {
+      if (!P) return true;
+      const { p, a, b } = state;
+      const left = mod(P.y * P.y, p);
+      const right = mod(P.x * P.x * P.x + a * P.x + b, p);
+      return left === right;
+    }
+
+    function cellData(ur, uz) {
+      const t = mod(uz + ur * state.d, state.n);
+      const r = state.row0R[t];
+      const y = state.row0Y[t];
+      return { ur, uz, t, r, y };
+    }
+
+    function torusDelta(a, b, n) {
+      const raw = Math.abs(a - b);
+      return Math.min(raw, n - raw);
+    }
+
+    function torusL1(aUr, aUz, bUr, bUz, n) {
+      return torusDelta(aUr, bUr, n) + torusDelta(aUz, bUz, n);
+    }
+
+    function prepareCanvas(canvas, ctx) {
+      const dpr = Math.min(2, window.devicePixelRatio || 1);
+      const rect = canvas.getBoundingClientRect();
+      const W = Math.max(1, rect.width);
+      const H = Math.max(1, rect.height);
+      const pixelW = Math.round(W * dpr);
+      const pixelH = Math.round(H * dpr);
+      if (canvas.width !== pixelW || canvas.height !== pixelH) {
+        canvas.width = pixelW;
+        canvas.height = pixelH;
+      }
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      return { W, H };
+    }
+
+    function getStoryStep() {
+      if (!state.story.enabled) return 4;
+      return state.story.step;
+    }
+
+    function getSelectedStratumKeyByIndex(index) {
+      const keys = state.stratumColorKeys;
+      if (!keys.length) return "INF";
+      const i = mod(index, keys.length);
+      return keys[i];
+    }
+
+    function updateLayerControls() {
+      const strataCount = Math.max(1, state.stratumColorKeys.length);
+      el.stratumLayer.max = String(strataCount - 1);
+      if (Number(el.stratumLayer.value) > strataCount - 1) el.stratumLayer.value = "0";
+
+      const famMax = Math.max(0, state.n - 1);
+      el.familyLayer.max = String(famMax);
+      if (Number(el.familyLayer.value) > famMax) el.familyLayer.value = "0";
+
+      const skey = getSelectedStratumKeyByIndex(Number(el.stratumLayer.value));
+      const fam = Number(el.familyLayer.value);
+      const tList = state.rToT.get(skey) || [];
+      el.layer3dInfo.textContent =
+        `Layer mode=${el.layerMode3d.value}; stratum r=${skey} (families t: ${tList.join(", ") || "-" }); family t=${fam}. ` +
+        `Мышь: wheel=масштаб сцены, drag=поворот.`;
+    }
+
+    function recomputeShiftVerification() {
+      state.verifyMismatches = 0;
+      state.verifyChecks = 0;
+      const checks = Math.min(state.n, 19);
+      for (let ur = 0; ur < checks; ur++) {
+        for (let uz = 0; uz < checks; uz++) {
+          const byShift = cellData(ur, uz);
+          const term1 = scalarMul(ur, state.Q);
+          const term2 = scalarMul(uz, state.G);
+          const direct = pointAdd(term1, term2);
+          const directR = direct ? mod(direct.x, state.n) : null;
+          state.verifyChecks += 1;
+          if (directR !== byShift.r) state.verifyMismatches += 1;
+        }
+      }
+    }
+
+    function getColor(d) {
+      const mode = el.colorMode.value;
+      if (mode === "family") {
+        const h = Math.floor((d.t * 360) / state.n);
+        return `hsl(${h} 82% 55%)`;
+      }
+      if (mode === "sheet") {
+        if (d.y === 1) return "#16a34a";
+        if (d.y === -1) return "#f59e0b";
+        return "#9ca3af";
+      }
+      if (mode === "rval") {
+        if (d.r === null) return "#4b5563";
+        const v = Math.floor((d.r * 255) / Math.max(1, state.n - 1));
+        return `rgb(${v}, ${255 - v}, 140)`;
+      }
+      const k = d.r === null ? "INF" : String(d.r);
+      const idx = state.stratumColorKeys.indexOf(k);
+      const h = Math.floor((idx * 360) / Math.max(1, state.stratumColorKeys.length));
+      return `hsl(${h} 78% 56%)`;
+    }
+
+    function rebuildModel(options = {}) {
+      state.n = Number(el.n.value);
+      state.p = Number(el.p.value);
+      state.a = Number(el.a.value);
+      state.b = Number(el.b.value);
+      state.G = { x: Number(el.gx.value), y: Number(el.gy.value) };
+      state.d = mod(Number(el.d.value), state.n || 1);
+      el.d.value = String(state.d);
+
+      state.valid = true;
+      state.msg = "";
+
+      if (!Number.isInteger(state.n) || !Number.isInteger(state.p) || state.n < 3 || state.p < 5) {
+        state.valid = false;
+        state.msg = "n и p должны быть целыми (n>=3, p>=5).";
+      }
+
+      if (state.valid && !isOnCurve(state.G)) {
+        state.valid = false;
+        state.msg = "G не лежит на кривой y^2 = x^3 + ax + b (mod p).";
+      }
+
+      state.pointsByT = new Array(Math.max(0, state.n)).fill(null);
+      state.row0R = new Array(Math.max(0, state.n)).fill(null);
+      state.row0Y = new Array(Math.max(0, state.n)).fill(0);
+      state.rToT = new Map();
+
+      if (state.valid) {
+        try {
+          state.pointsByT[0] = null;
+          for (let t = 1; t < state.n; t++) {
+            state.pointsByT[t] = pointAdd(state.pointsByT[t - 1], state.G);
+          }
+
+          for (let t = 0; t < state.n; t++) {
+            const P = state.pointsByT[t];
+            const r = P ? mod(P.x, state.n) : null;
+            state.row0R[t] = r;
+            state.row0Y[t] = P ? ((P.y % 2 === 0) ? 1 : -1) : 0;
+            const key = r === null ? "INF" : String(r);
+            if (!state.rToT.has(key)) state.rToT.set(key, []);
+            state.rToT.get(key).push(t);
+          }
+
+          state.stratumColorKeys = [...state.rToT.keys()].sort((a, b) => {
+            if (a === "INF") return -1;
+            if (b === "INF") return 1;
+            return Number(a) - Number(b);
+          });
+
+          state.Q = scalarMul(state.d, state.G);
+          recomputeShiftVerification();
+
+          if (state.selected.ur >= state.n || state.selected.uz >= state.n) {
+            state.selected = { ur: 0, uz: 0 };
+          }
+        } catch (err) {
+          state.valid = false;
+          state.msg = `Ошибка вычисления: ${String(err.message || err)}`;
+        }
+      }
+
+      updateLayerControls();
+      if (!options.skipDScan) recomputeDScanScores();
+      updateStoryInfo();
+      drawAll();
+      fillTables();
+      fillStats();
+      fillSelectedInfo();
+    }
+
+    function fillStats() {
+      const n = state.n;
+      const totalCells = n * n;
+      const strataCount = state.rToT.size;
+      let cross = 0;
+      let maxFamilyPerStratum = 0;
+      for (const ts of state.rToT.values()) {
+        if (ts.length > 1) cross += 1;
+        if (ts.length > maxFamilyPerStratum) maxFamilyPerStratum = ts.length;
+      }
+
+      const qText = state.Q ? `(${state.Q.x}, ${state.Q.y})` : "INF";
+      const cards = [
+        ["cells u_r×u_z", totalCells],
+        ["families (t)", n],
+        ["strata (уникальные r)", strataCount],
+        ["cross-family strata", cross],
+        ["max families / stratum", maxFamilyPerStratum],
+        ["Q = dG", qText],
+        ["shift-check (direct vs shifted)", `${state.verifyChecks - state.verifyMismatches}/${state.verifyChecks}`],
+      ];
+
+      if (!state.valid) {
+        el.statsBox.innerHTML = `<div class="stat" style="grid-column:1 / -1"><div class="k">Ошибка</div><div class="v" style="font-size:14px">${state.msg}</div></div>`;
+        return;
+      }
+
+      el.statsBox.innerHTML = cards.map(([k, v]) => (
+        `<div class="stat"><div class="k">${k}</div><div class="v mono">${v}</div></div>`
+      )).join("");
+    }
+
+    function fillSelectedInfo() {
+      if (!state.valid) {
+        el.selectedInfo.innerHTML = "";
+        el.selectedNote.textContent = state.msg;
+        return;
+      }
+
+      const s = cellData(state.selected.ur, state.selected.uz);
+      const key = s.r === null ? "INF" : String(s.r);
+      const familyList = state.rToT.get(key) || [];
+      const ts = familyList.join(", ");
+
+      const adu = torusDelta(state.selected.ur, state.anchor.ur, state.n);
+      const adz = torusDelta(state.selected.uz, state.anchor.uz, state.n);
+      const ad = torusL1(state.selected.ur, state.selected.uz, state.anchor.ur, state.anchor.uz, state.n);
+
+      const info = [
+        ["u_r", s.ur],
+        ["u_z", s.uz],
+        ["t = u_r*d + u_z (mod n)", s.t],
+        ["r = x([t]G) mod n", s.r === null ? "INF" : s.r],
+        ["sheet y", s.y],
+        ["stratum families t", ts || "-"],
+        ["anchor (u_r,u_z)", `${state.anchor.ur}, ${state.anchor.uz}`],
+        ["torus L1 distance", `${ad} (du=${adu}, dz=${adz})`],
+      ];
+
+      el.selectedInfo.innerHTML = info.map(([k, v]) => (`
+        <div class="info-cell"><div style="color:var(--muted)">${k}</div><div class="mono" style="margin-top:2px">${v}</div></div>
+      `)).join("");
+
+      el.selectedNote.textContent = "Клик по 2D-таблице: выбирает точку и сразу показывает ее family/stratum. Shift+клик: ставит anchor для torus-distance.";
+    }
+
+    function resonanceScoreForD(testD) {
+      const n = state.n;
+      if (!n) return 0;
+      let eq = 0;
+      let total = 0;
+      for (let ur = 0; ur < n; ur++) {
+        for (let uz = 0; uz < n; uz++) {
+          const t = mod(uz + ur * testD, n);
+          const r = state.row0R[t];
+          const tr = mod((uz + 1) + ur * testD, n);
+          const td = mod(uz + (ur + 1) * testD, n);
+          if (r === state.row0R[tr]) eq += 1;
+          if (r === state.row0R[td]) eq += 1;
+          total += 2;
+        }
+      }
+      return total ? (eq / total) : 0;
+    }
+
+    function recomputeDScanScores() {
+      if (!state.valid) {
+        state.dscan.scores = [];
+        drawDScan();
+        return;
+      }
+      const scores = [];
+      let bestScore = -1;
+      let bestD = 0;
+      for (let d = 0; d < state.n; d++) {
+        const score = resonanceScoreForD(d);
+        scores.push({ d, score });
+        if (score > bestScore) {
+          bestScore = score;
+          bestD = d;
+        }
+      }
+      state.dscan.scores = scores;
+      state.dscan.bestD = bestD;
+      state.dscan.bestScore = bestScore;
+      state.dscan.cursor = mod(state.dscan.cursor, Math.max(1, state.n));
+      drawDScan();
+    }
+
+    function drawDScan() {
+      const { W, H } = prepareCanvas(el.dscanCanvas, dscanCtx);
+      dscanCtx.clearRect(0, 0, W, H);
+      if (!state.valid || !state.dscan.scores.length) {
+        drawCenterText(dscanCtx, W, H, state.valid ? "Нет данных d-scan." : state.msg);
+        el.dscanInfo.textContent = state.valid ? "" : state.msg;
+        return;
+      }
+
+      const scores = state.dscan.scores;
+      let min = Number.POSITIVE_INFINITY;
+      let max = Number.NEGATIVE_INFINITY;
+      for (const it of scores) {
+        if (it.score < min) min = it.score;
+        if (it.score > max) max = it.score;
+      }
+      const span = Math.max(1e-12, max - min);
+
+      for (const it of scores) {
+        const x0 = (it.d / state.n) * W;
+        const x1 = ((it.d + 1) / state.n) * W;
+        const t = (it.score - min) / span;
+        const hue = Math.floor(220 - 220 * t);
+        dscanCtx.fillStyle = `hsl(${hue} 90% 55%)`;
+        dscanCtx.fillRect(x0, 0, Math.max(1, x1 - x0), H);
+      }
+
+      dscanCtx.strokeStyle = "#e2e8f0";
+      dscanCtx.lineWidth = 2;
+      const curX = ((state.d + 0.5) / state.n) * W;
+      dscanCtx.beginPath();
+      dscanCtx.moveTo(curX, 0);
+      dscanCtx.lineTo(curX, H);
+      dscanCtx.stroke();
+
+      dscanCtx.strokeStyle = "#22c55e";
+      dscanCtx.lineWidth = 2;
+      const bestX = ((state.dscan.bestD + 0.5) / state.n) * W;
+      dscanCtx.beginPath();
+      dscanCtx.moveTo(bestX, 0);
+      dscanCtx.lineTo(bestX, H);
+      dscanCtx.stroke();
+
+      dscanCtx.fillStyle = "#e6eef9";
+      dscanCtx.font = "12px IBM Plex Mono, monospace";
+      dscanCtx.fillText(`d=${state.d}`, 8, 16);
+      dscanCtx.fillText(`best d=${state.dscan.bestD}`, 8, 32);
+
+      const curScore = scores[state.d] ? scores[state.d].score : 0;
+      el.dscanInfo.textContent =
+        `Резонанс (доля равенств соседних raw-r): d=${state.d}, score=${curScore.toFixed(5)}; ` +
+        `best d=${state.dscan.bestD}, best score=${state.dscan.bestScore.toFixed(5)}.`;
+    }
+
+    function applyDValue(newD, skipDScan = true) {
+      if (!state.valid) return;
+      state.d = mod(newD, state.n);
+      el.d.value = String(state.d);
+      try {
+        state.Q = scalarMul(state.d, state.G);
+        recomputeShiftVerification();
+      } catch (_) {}
+      if (!skipDScan) recomputeDScanScores();
+      fillStats();
+      fillTables();
+      fillSelectedInfo();
+      drawAll();
+    }
+
+    function startDScan() {
+      stopDScan();
+      if (!state.valid) return;
+      const speed = Math.max(20, Number(el.dscanSpeed.value) || 120);
+      state.dscan.running = true;
+      state.dscan.cursor = mod(state.d, state.n);
+      state.dscan.timer = setInterval(() => {
+        state.dscan.cursor = mod(state.dscan.cursor + 1, state.n);
+        applyDValue(state.dscan.cursor, true);
+      }, speed);
+    }
+
+    function stopDScan() {
+      state.dscan.running = false;
+      if (state.dscan.timer) {
+        clearInterval(state.dscan.timer);
+        state.dscan.timer = null;
+      }
+    }
+
+    function updateStoryInfo() {
+      state.story.enabled = el.storyMode.checked;
+      state.story.step = Number(el.storyStep.value);
+      state.presentation.enabled = el.presentationMode.checked;
+      state.presentation.autoCamera = el.presentationAutoCamera.checked;
+      const texts = [
+        "Шаг 1/4: формула R = (u_r*d + u_z)G и ось d.",
+        "Шаг 2/4: базовая строка (u_r=0), считается один раз.",
+        "Шаг 3/4: сдвиг строки на u_r*d (mod n).",
+        "Шаг 4/4: strata/family и их инварианты.",
+      ];
+      el.storyInfo.textContent = state.story.enabled ? texts[state.story.step - 1] : "Story mode выключен.";
+
+      if (state.presentation.enabled) {
+        el.presentationInfo.textContent =
+          `Сцена: шаг ${state.story.step}/4, авто-камера=${state.presentation.autoCamera ? "ON" : "OFF"}, ` +
+          `режим показа ${state.presentation.playing ? "воспроизводится" : "вручную"}.`;
+      } else {
+        el.presentationInfo.textContent = "Режим выступления выключен.";
+      }
+
+      if (state.presentation.enabled && state.presentation.autoCamera) {
+        state.presentation.targets = getPresentationCameraTargets(state.story.step);
+      } else {
+        state.presentation.targets = null;
+      }
+    }
+
+    function computeDynamicStratumMetrics(dValue) {
+      const n = state.n;
+      const metrics = new Map();
+      let globalDeltaSum = 0;
+
+      for (const [key, ts] of state.rToT.entries()) {
+        const baseR = key === "INF" ? null : Number(key);
+        let sameVerticalHits = 0;
+        let deltaSum = 0;
+
+        for (const t of ts) {
+          const shiftedR = state.row0R[mod(t + dValue, n)];
+          if (shiftedR === baseR) sameVerticalHits += 1;
+
+          const a = baseR === null ? 0 : baseR;
+          const b = shiftedR === null ? 0 : shiftedR;
+          deltaSum += torusDelta(a, b, n);
+        }
+
+        const sameRatio = ts.length ? (sameVerticalHits / ts.length) : 0;
+        const avgDelta = ts.length ? (deltaSum / ts.length) : 0;
+        metrics.set(key, {
+          sameVerticalHits,
+          sameVerticalLinks: sameVerticalHits * n,
+          sameRatio,
+          avgDelta,
+        });
+      }
+
+      for (let t = 0; t < n; t++) {
+        const a = state.row0R[t] === null ? 0 : state.row0R[t];
+        const bRaw = state.row0R[mod(t + dValue, n)];
+        const b = bRaw === null ? 0 : bRaw;
+        globalDeltaSum += torusDelta(a, b, n);
+      }
+
+      return {
+        perStratum: metrics,
+        globalAvgDelta: n ? (globalDeltaSum / n) : 0,
+      };
+    }
+
+    function getPresentationCameraTargets(step) {
+      const presets = {
+        1: { rotX: 20, rotY: -32, viewScale: 145, zoom: 118, showD: true, showT: false, layerMode: "all" },
+        2: { rotX: 7, rotY: -96, viewScale: 162, zoom: 125, showD: true, showT: false, layerMode: "all" },
+        3: { rotX: 28, rotY: -36, viewScale: 140, zoom: 122, showD: true, showT: false, layerMode: "family" },
+        4: { rotX: 34, rotY: 46, viewScale: 132, zoom: 116, showD: true, showT: true, layerMode: "stratum" },
+      };
+      return presets[step] || presets[4];
+    }
+
+    function angleDiff(a, b) {
+      let d = b - a;
+      while (d > 180) d -= 360;
+      while (d < -180) d += 360;
+      return d;
+    }
+
+    function approach(current, target, alpha) {
+      return current + (target - current) * alpha;
+    }
+
+    function approachAngle(current, target, alpha) {
+      const d = angleDiff(current, target);
+      return current + d * alpha;
+    }
+
+    function applyPresentationCameraInstant() {
+      if (!state.presentation.targets) return;
+      const t = state.presentation.targets;
+      el.rotX.value = String(t.rotX);
+      el.rotY.value = String(t.rotY);
+      el.viewScale.value = String(t.viewScale);
+      el.zoom.value = String(t.zoom);
+      el.showDAxis3D.checked = t.showD;
+      el.showTorus3D.checked = t.showT;
+      el.layerMode3d.value = t.layerMode;
+      if (t.layerMode === "family") {
+        el.familyLayer.value = String(state.selected.ur % Math.max(1, state.n));
+      }
+      if (t.layerMode === "stratum") {
+        el.stratumLayer.value = "0";
+      }
+    }
+
+    function stepPresentationCamera(dt) {
+      if (!state.presentation.targets || !state.presentation.autoCamera || state.isDragging3D) return;
+      const alpha = Math.min(1, Math.max(0.05, dt * 3.2));
+      const t = state.presentation.targets;
+
+      const rx = Number(el.rotX.value);
+      const ry = Number(el.rotY.value);
+      const vs = Number(el.viewScale.value);
+      const zm = Number(el.zoom.value);
+      el.rotX.value = String(approach(rx, t.rotX, alpha));
+      el.rotY.value = String(approachAngle(ry, t.rotY, alpha));
+      el.viewScale.value = String(approach(vs, t.viewScale, alpha));
+      el.zoom.value = String(approach(zm, t.zoom, alpha));
+      el.showDAxis3D.checked = t.showD;
+      el.showTorus3D.checked = t.showT;
+      el.layerMode3d.value = t.layerMode;
+    }
+
+    function getPresentationAnnotation(step) {
+      const cards = {
+        1: {
+          title: "Шаг 1: Базовая формула",
+          lines: [
+            "R = (u_r*d + u_z)G",
+            "t = (u_r*d + u_z) mod n",
+            "Ключевая ось: d через t-координату",
+          ],
+        },
+        2: {
+          title: "Шаг 2: Базовая строка",
+          lines: [
+            "u_r = 0 вычисляется один раз",
+            "получаем эталон row0: r(t)",
+            "никакой нормализации, только raw",
+          ],
+        },
+        3: {
+          title: "Шаг 3: Сдвиг по d",
+          lines: [
+            "каждая строка = сдвиг row0",
+            "shift = u_r*d (mod n)",
+            "семейства t проявляются как полосы",
+          ],
+        },
+        4: {
+          title: "Шаг 4: Strata и Family",
+          lines: [
+            "stratum: совпадение raw r",
+            "family: фиксированный t",
+            "инварианты читаются напрямую",
+          ],
+        },
+      };
+      return cards[step] || cards[4];
+    }
+
+    function drawPresentationOverlay(ctx, W, H, step) {
+      const card = getPresentationAnnotation(step);
+      const cardW = Math.min(360, W - 20);
+      const x = W - cardW - 10;
+      const y = 30;
+      const lineH = 18;
+      const h = 28 + card.lines.length * lineH + 10;
+      ctx.fillStyle = "rgba(7,10,15,0.78)";
+      ctx.fillRect(x, y, cardW, h);
+      ctx.strokeStyle = "#3b82f6";
+      ctx.lineWidth = 1.2;
+      ctx.strokeRect(x + 0.5, y + 0.5, cardW - 1, h - 1);
+      ctx.fillStyle = "#dbeafe";
+      ctx.font = "bold 13px IBM Plex Sans, sans-serif";
+      ctx.fillText(card.title, x + 10, y + 18);
+      ctx.font = "12px IBM Plex Sans, sans-serif";
+      for (let i = 0; i < card.lines.length; i++) {
+        ctx.fillText(`• ${card.lines[i]}`, x + 10, y + 38 + i * lineH);
+      }
+    }
+
+    function startPresentationScene() {
+      stopPresentationScene();
+      el.presentationMode.checked = true;
+      el.storyMode.checked = true;
+      el.storyStep.value = "1";
+      el.autoRotate.checked = false;
+      state.presentation.playing = true;
+      updateStoryInfo();
+      applyPresentationCameraInstant();
+      drawAll();
+      state.presentation.timer = setInterval(() => {
+        const cur = Number(el.storyStep.value);
+        const next = cur >= 4 ? 1 : cur + 1;
+        el.storyStep.value = String(next);
+        updateStoryInfo();
+        drawAll();
+      }, 3600);
+    }
+
+    function stopPresentationScene() {
+      state.presentation.playing = false;
+      if (state.presentation.timer) {
+        clearInterval(state.presentation.timer);
+        state.presentation.timer = null;
+      }
+      updateStoryInfo();
+    }
+
+    function fillTables() {
+      if (!state.valid) {
+        el.shiftTableWrap.innerHTML = "";
+        el.strataTableWrap.innerHTML = "";
+        return;
+      }
+
+      const n = state.n;
+      const maxRows = Math.min(n, 12);
+      const maxCols = Math.min(n, 24);
+      const dynamic = computeDynamicStratumMetrics(state.d);
+
+      let shiftHtml = "<table><thead><tr><th>u_r</th><th>shift = u_r*d mod n</th>";
+      for (let uz = 0; uz < maxCols; uz++) shiftHtml += `<th>u_z=${uz}</th>`;
+      shiftHtml += "</tr></thead><tbody>";
+
+      for (let ur = 0; ur < maxRows; ur++) {
+        const shift = mod(ur * state.d, n);
+        shiftHtml += `<tr><td>${ur}</td><td class=\"mono\">${shift}</td>`;
+        for (let uz = 0; uz < maxCols; uz++) {
+          const t = mod(uz + shift, n);
+          const r = state.row0R[t];
+          shiftHtml += `<td class=\"mono\">${r === null ? "∞" : r}</td>`;
+        }
+        shiftHtml += "</tr>";
+      }
+      shiftHtml += "</tbody></table>";
+      shiftHtml += `<div class="small-note">Сверху: первые ${maxRows} строк таблицы. Каждая строка получена из базовой строки сдвигом на <span class="mono">u_r·d mod n</span>. Значения — raw <span class="mono">r</span>.</div>`;
+      el.shiftTableWrap.innerHTML = shiftHtml;
+
+      const entries = [...state.rToT.entries()].sort((a, b) => {
+        const [ra] = a, [rb] = b;
+        if (ra === "INF") return -1;
+        if (rb === "INF") return 1;
+        return Number(ra) - Number(rb);
+      });
+
+      let strataHtml =
+        "<table><thead><tr>" +
+        "<th>stratum (r)</th><th>#families t</th><th>families t</th><th>size in grid</th>" +
+        "<th>same-r@d (t)</th><th>same-r@d links</th><th>avg Δr@d</th>" +
+        "</tr></thead><tbody>";
+      for (const [r, ts] of entries) {
+        const m = dynamic.perStratum.get(r) || { sameVerticalHits: 0, sameVerticalLinks: 0, avgDelta: 0 };
+        strataHtml +=
+          `<tr>` +
+          `<td class=\"mono\">${r}</td>` +
+          `<td>${ts.length}</td>` +
+          `<td class=\"mono\">${ts.join(", ")}</td>` +
+          `<td>${ts.length * state.n}</td>` +
+          `<td>${m.sameVerticalHits}/${ts.length}</td>` +
+          `<td>${m.sameVerticalLinks}</td>` +
+          `<td>${m.avgDelta.toFixed(3)}</td>` +
+          `</tr>`;
+      }
+      strataHtml += "</tbody></table>";
+      strataHtml +=
+        "<div class='small-note'>" +
+        `Инварианты (stratum/family) слева фиксированы, d-динамика справа пересчитывается на каждом шаге d-scan. ` +
+        `Текущее d=${state.d}, global avg Δr@d=${dynamic.globalAvgDelta.toFixed(3)}.` +
+        "</div>";
+      el.strataTableWrap.innerHTML = strataHtml;
+    }
+
+    function draw2D() {
+      const n = state.n;
+      const { W, H } = prepareCanvas(el.gridCanvas, gridCtx);
+      gridCtx.clearRect(0, 0, W, H);
+
+      if (!state.valid) {
+        drawCenterText(gridCtx, W, H, state.msg);
+        return;
+      }
+
+      const cellW = W / n;
+      const cellH = H / n;
+      const storyStep = getStoryStep();
+      const storyRow = (state.selected.ur === 0) ? Math.max(1, Math.floor(n / 5)) : state.selected.ur;
+
+      for (let ur = 0; ur < n; ur++) {
+        for (let uz = 0; uz < n; uz++) {
+          const d = cellData(ur, uz);
+          let dim = false;
+          if (storyStep === 2 && ur !== 0) dim = true;
+          if (storyStep === 3 && ur !== 0 && ur !== storyRow) dim = true;
+
+          gridCtx.fillStyle = dim ? "#1f2937" : getColor(d);
+          gridCtx.fillRect(uz * cellW, ur * cellH, cellW + 0.6, cellH + 0.6);
+
+          if (!dim && el.showLabels.checked && cellW >= 18 && cellH >= 18) {
+            gridCtx.fillStyle = "#0b0f14";
+            gridCtx.font = "10px IBM Plex Mono, monospace";
+            gridCtx.fillText(d.r === null ? "∞" : String(d.r), uz * cellW + 2, ur * cellH + 11);
+          }
+        }
+      }
+
+      gridCtx.strokeStyle = "rgba(255,255,255,0.08)";
+      gridCtx.lineWidth = 1;
+      for (let i = 0; i <= n; i++) {
+        const y = i * cellH;
+        const x = i * cellW;
+        gridCtx.beginPath(); gridCtx.moveTo(0, y); gridCtx.lineTo(W, y); gridCtx.stroke();
+        gridCtx.beginPath(); gridCtx.moveTo(x, 0); gridCtx.lineTo(x, H); gridCtx.stroke();
+      }
+
+      const s = cellData(state.selected.ur, state.selected.uz);
+      const stratumKey = s.r === null ? "INF" : String(s.r);
+      const stratumTs = new Set(state.rToT.get(stratumKey) || []);
+
+      if ((el.showStratum.checked || el.showFamily.checked) && storyStep >= 3) {
+        for (let ur = 0; ur < n; ur++) {
+          for (let uz = 0; uz < n; uz++) {
+            const d = cellData(ur, uz);
+            const inFamily = d.t === s.t;
+            const inStratum = stratumTs.has(d.t);
+            if ((el.showFamily.checked && inFamily) || (el.showStratum.checked && inStratum)) {
+              gridCtx.strokeStyle = inFamily ? "#fef08a" : "#e2e8f0";
+              gridCtx.lineWidth = inFamily ? 1.8 : 1.1;
+              gridCtx.strokeRect(uz * cellW + 0.7, ur * cellH + 0.7, cellW - 1.4, cellH - 1.4);
+            }
+          }
+        }
+      }
+
+      const sx = state.selected.uz * cellW;
+      const sy = state.selected.ur * cellH;
+      gridCtx.lineWidth = 2.2;
+      gridCtx.strokeStyle = "#22d3ee";
+      gridCtx.strokeRect(sx + 0.5, sy + 0.5, cellW - 1, cellH - 1);
+
+      const ax = state.anchor.uz * cellW + cellW / 2;
+      const ay = state.anchor.ur * cellH + cellH / 2;
+      gridCtx.beginPath();
+      gridCtx.fillStyle = "#f43f5e";
+      gridCtx.arc(ax, ay, Math.max(2, Math.min(cellW, cellH) * 0.2), 0, Math.PI * 2);
+      gridCtx.fill();
+
+      gridCtx.fillStyle = "#c7d2e5";
+      gridCtx.font = "12px IBM Plex Mono, monospace";
+      gridCtx.fillText("u_z →", W - 55, H - 7);
+      gridCtx.save();
+      gridCtx.translate(7, 53);
+      gridCtx.rotate(-Math.PI / 2);
+      gridCtx.fillText("u_r →", 0, 0);
+      gridCtx.restore();
+
+      if (storyStep === 1) {
+        gridCtx.fillStyle = "rgba(7,10,15,0.72)";
+        gridCtx.fillRect(8, 8, Math.min(430, W - 16), 52);
+        gridCtx.fillStyle = "#dbeafe";
+        gridCtx.font = "13px IBM Plex Mono, monospace";
+        gridCtx.fillText("R = (u_r*d + u_z)G", 16, 28);
+        gridCtx.fillText(`t = (u_r*d + u_z) mod ${n}`, 16, 46);
+      } else if (storyStep === 2) {
+        gridCtx.strokeStyle = "#22c55e";
+        gridCtx.lineWidth = 2.2;
+        gridCtx.strokeRect(0.9, 0.9, W - 1.8, cellH - 1.8);
+      } else if (storyStep === 3) {
+        gridCtx.strokeStyle = "#22c55e";
+        gridCtx.lineWidth = 2.2;
+        gridCtx.strokeRect(0.9, 0.9, W - 1.8, cellH - 1.8);
+        gridCtx.strokeStyle = "#f59e0b";
+        gridCtx.strokeRect(0.9, storyRow * cellH + 0.9, W - 1.8, cellH - 1.8);
+      }
+    }
+
+    function draw3D() {
+      const { W, H } = prepareCanvas(el.sceneCanvas, sceneCtx);
+      sceneCtx.clearRect(0, 0, W, H);
+
+      if (!state.valid) {
+        drawCenterText(sceneCtx, W, H, state.msg);
+        return;
+      }
+
+      const showD = el.showDAxis3D.checked;
+      const showT = el.showTorus3D.checked;
+      if (!showD && !showT) {
+        drawCenterText(sceneCtx, W, H, "Включите 3D режим: ось d и/или тор.");
+        return;
+      }
+
+      const rx = Number(el.rotX.value) * Math.PI / 180;
+      const ry = Number(el.rotY.value) * Math.PI / 180;
+      const pointDensity = Number(el.zoom.value) / 100;
+      const viewScale = Number(el.viewScale.value) / 100;
+      const step = Math.max(1, Number(el.step3d.value) || 1);
+      const n = state.n;
+      const storyStep = getStoryStep();
+      const storyRow = (state.selected.ur === 0) ? Math.max(1, Math.floor(n / 5)) : state.selected.ur;
+      const layerMode = el.layerMode3d.value;
+      const stratumKey = getSelectedStratumKeyByIndex(Number(el.stratumLayer.value));
+      const familyT = Number(el.familyLayer.value);
+      const stepEff = storyStep === 1 ? Math.max(step, Math.ceil(n / 18)) : step;
+
+      function rotate(v) {
+        const cy = Math.cos(ry), sy = Math.sin(ry);
+        const cx = Math.cos(rx), sx = Math.sin(rx);
+
+        let x = v.x;
+        let y = v.y;
+        let z = v.z;
+
+        const x1 = x * cy + z * sy;
+        const z1 = -x * sy + z * cy;
+
+        const y2 = y * cx - z1 * sx;
+        const z2 = y * sx + z1 * cx;
+
+        return { x: x1, y: y2, z: z2 };
+      }
+
+      function project(v) {
+        const dist = 340;
+        const k = dist / (dist + v.z * 0.9);
+        return {
+          x: W / 2 + v.x * k,
+          y: H / 2 - v.y * k,
+          k,
+        };
+      }
+
+      function drawAxis() {
+        const s = (n / 2) * viewScale;
+        const axes = [
+          [{ x: -s, y: -s, z: -s }, { x: s, y: -s, z: -s }, "#60a5fa", "u_z"],
+          [{ x: -s, y: -s, z: -s }, { x: -s, y: s, z: -s }, "#22c55e", "u_r"],
+          [{ x: -s, y: -s, z: -s }, { x: -s, y: -s, z: s }, "#f59e0b", "t (d-ось)"],
+        ];
+
+        for (const [a, b, c, label] of axes) {
+          const ra = project(rotate(a));
+          const rb = project(rotate(b));
+          sceneCtx.strokeStyle = c;
+          sceneCtx.lineWidth = 2;
+          sceneCtx.beginPath();
+          sceneCtx.moveTo(ra.x, ra.y);
+          sceneCtx.lineTo(rb.x, rb.y);
+          sceneCtx.stroke();
+          sceneCtx.fillStyle = c;
+          sceneCtx.font = "12px IBM Plex Mono, monospace";
+          sceneCtx.fillText(label, rb.x + 4, rb.y + 2);
+        }
+      }
+
+      if (showD && el.drawWire.checked) drawAxis();
+
+      const points = [];
+      for (let ur = 0; ur < n; ur += stepEff) {
+        for (let uz = 0; uz < n; uz += stepEff) {
+          if (storyStep === 2 && ur !== 0) continue;
+          if (storyStep === 3 && ur !== 0 && ur !== storyRow) continue;
+
+          const d = cellData(ur, uz);
+          const key = d.r === null ? "INF" : String(d.r);
+
+          if (layerMode === "stratum" && key !== stratumKey) continue;
+          if (layerMode === "family" && d.t !== familyT) continue;
+
+          if (showD) {
+            const vx = (uz - n / 2) * viewScale;
+            const vy = (ur - n / 2) * viewScale;
+            const vz = (d.t - n / 2) * viewScale;
+            points.push({ v: { x: vx, y: vy, z: vz }, color: getColor(d), key: `${ur}-${uz}`, isSel: ur === state.selected.ur && uz === state.selected.uz });
+          }
+
+          if (showT) {
+            const phi = 2 * Math.PI * ur / n;
+            const theta = 2 * Math.PI * uz / n;
+            const R = n * 0.26 * viewScale;
+            const r = n * 0.11 * viewScale;
+            const tx = (R + r * Math.cos(theta)) * Math.cos(phi);
+            const ty = (R + r * Math.cos(theta)) * Math.sin(phi);
+            const tz = r * Math.sin(theta);
+            points.push({ v: { x: tx, y: ty, z: tz }, color: getColor(d), key: `t-${ur}-${uz}`, isSel: ur === state.selected.ur && uz === state.selected.uz });
+          }
+        }
+      }
+
+      points.sort((a, b) => {
+        const za = rotate(a.v).z;
+        const zb = rotate(b.v).z;
+        return za - zb;
+      });
+
+      for (const p of points) {
+        const pr = project(rotate(p.v));
+        const radius = Math.max(1, 1.8 * pr.k * pointDensity);
+        sceneCtx.beginPath();
+        sceneCtx.fillStyle = p.color;
+        sceneCtx.arc(pr.x, pr.y, radius, 0, Math.PI * 2);
+        sceneCtx.fill();
+
+        if (p.isSel) {
+          sceneCtx.lineWidth = 1.8;
+          sceneCtx.strokeStyle = "#e2e8f0";
+          sceneCtx.stroke();
+        }
+      }
+
+      sceneCtx.fillStyle = "#cdd8ea";
+      sceneCtx.font = "12px IBM Plex Mono, monospace";
+      const modeTxt = showD && showT ? "режим: d-ось + тор" : (showD ? "режим: d-ось" : "режим: тор");
+      sceneCtx.fillText(`${modeTxt}; layer=${layerMode}; story=${storyStep}/4`, 10, 18);
+
+      if (storyStep === 1) {
+        sceneCtx.fillStyle = "rgba(7,10,15,0.70)";
+        sceneCtx.fillRect(8, H - 50, Math.min(430, W - 16), 38);
+        sceneCtx.fillStyle = "#dbeafe";
+        sceneCtx.fillText("R = (u_r*d + u_z)G  ->  t-ось показывает d-сдвиг", 14, H - 26);
+      }
+
+      if (state.presentation.enabled) {
+        drawPresentationOverlay(sceneCtx, W, H, storyStep);
+      }
+    }
+
+    function drawCenterText(ctx, w, h, text) {
+      ctx.fillStyle = "#95a6be";
+      ctx.font = "15px IBM Plex Sans, sans-serif";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText(text, w / 2, h / 2);
+      ctx.textAlign = "start";
+      ctx.textBaseline = "alphabetic";
+    }
+
+    function drawAll() {
+      draw2D();
+      draw3D();
+      drawDScan();
+      updateLayerControls();
+    }
+
+    function onGridClick(ev) {
+      if (!state.valid) return;
+      const rect = el.gridCanvas.getBoundingClientRect();
+      const x = ev.clientX - rect.left;
+      const y = ev.clientY - rect.top;
+      const uz = Math.floor((x / rect.width) * state.n);
+      const ur = Math.floor((y / rect.height) * state.n);
+      if (uz < 0 || uz >= state.n || ur < 0 || ur >= state.n) return;
+
+      if (ev.shiftKey) {
+        state.anchor = { ur, uz };
+      } else {
+        state.selected = { ur, uz };
+      }
+
+      fillSelectedInfo();
+      drawAll();
+    }
+
+    function onSceneWheel(ev) {
+      ev.preventDefault();
+      const cur = Number(el.viewScale.value);
+      const next = Math.max(30, Math.min(300, cur + (ev.deltaY < 0 ? 8 : -8)));
+      el.viewScale.value = String(next);
+      draw3D();
+      updateLayerControls();
+    }
+
+    function onSceneMouseDown(ev) {
+      state.isDragging3D = true;
+      state.lastDragX = ev.clientX;
+      state.lastDragY = ev.clientY;
+      el.sceneCanvas.style.cursor = "grabbing";
+    }
+
+    function onSceneMouseMove(ev) {
+      if (!state.isDragging3D) return;
+      const dx = ev.clientX - state.lastDragX;
+      const dy = ev.clientY - state.lastDragY;
+      state.lastDragX = ev.clientX;
+      state.lastDragY = ev.clientY;
+      let rx = Number(el.rotX.value) - dy * 0.35;
+      let ry = Number(el.rotY.value) + dx * 0.35;
+      if (rx > 180) rx -= 360;
+      if (rx < -180) rx += 360;
+      if (ry > 180) ry -= 360;
+      if (ry < -180) ry += 360;
+      el.rotX.value = String(rx);
+      el.rotY.value = String(ry);
+      draw3D();
+    }
+
+    function onSceneMouseUp() {
+      state.isDragging3D = false;
+      el.sceneCanvas.style.cursor = "grab";
+    }
+
+    function resetView3D() {
+      el.rotX.value = "28";
+      el.rotY.value = "-36";
+      el.viewScale.value = "130";
+      el.zoom.value = "115";
+      draw3D();
+    }
+
+    function nextStoryStep() {
+      if (!el.storyMode.checked) el.storyMode.checked = true;
+      let step = Number(el.storyStep.value);
+      step = step >= 4 ? 1 : (step + 1);
+      el.storyStep.value = String(step);
+      updateStoryInfo();
+      drawAll();
+    }
+
+    function stopStoryPlay() {
+      state.story.playing = false;
+      if (state.story.timer) {
+        clearInterval(state.story.timer);
+        state.story.timer = null;
+      }
+      el.storyPlayBtn.textContent = "Play 4 шага";
+    }
+
+    function toggleStoryPlay() {
+      if (state.story.playing) {
+        stopStoryPlay();
+        return;
+      }
+      if (state.presentation.playing) stopPresentationScene();
+      el.storyMode.checked = true;
+      el.storyStep.value = "1";
+      updateStoryInfo();
+      drawAll();
+      state.story.playing = true;
+      el.storyPlayBtn.textContent = "Стоп Story";
+      state.story.timer = setInterval(() => {
+        const cur = Number(el.storyStep.value);
+        if (cur >= 4) {
+          stopStoryPlay();
+          return;
+        }
+        el.storyStep.value = String(cur + 1);
+        updateStoryInfo();
+        drawAll();
+      }, 1500);
+    }
+
+    function setExportInfo(msg) {
+      el.exportInfo.textContent = msg;
+    }
+
+    function downloadBlob(blob, filename) {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+
+    function exportCanvasPNG(canvas, name) {
+      canvas.toBlob((blob) => {
+        if (!blob) return;
+        downloadBlob(blob, name);
+      }, "image/png");
+    }
+
+    const GIF_PALETTE = (() => {
+      const p = new Uint8Array(256 * 3);
+      let idx = 0;
+      const levels = [0, 51, 102, 153, 204, 255];
+      for (let r = 0; r < 6; r++) {
+        for (let g = 0; g < 6; g++) {
+          for (let b = 0; b < 6; b++) {
+            p[idx++] = levels[r];
+            p[idx++] = levels[g];
+            p[idx++] = levels[b];
+          }
+        }
+      }
+      while (idx < p.length) p[idx++] = 0;
+      return p;
+    })();
+
+    function imageDataToIndexed(img) {
+      const data = img.data;
+      const out = new Uint8Array(img.width * img.height);
+      let j = 0;
+      for (let i = 0; i < data.length; i += 4) {
+        const r = data[i];
+        const g = data[i + 1];
+        const b = data[i + 2];
+        const ri = Math.min(5, Math.round(r / 51));
+        const gi = Math.min(5, Math.round(g / 51));
+        const bi = Math.min(5, Math.round(b / 51));
+        out[j++] = ri * 36 + gi * 6 + bi;
+      }
+      return out;
+    }
+
+    function lzwEncode(indices, minCodeSize) {
+      const clearCode = 1 << minCodeSize;
+      const endCode = clearCode + 1;
+      let nextCode = endCode + 1;
+      let codeSize = minCodeSize + 1;
+
+      const bytes = [];
+      let bitBuffer = 0;
+      let bitCount = 0;
+
+      function writeCode(code) {
+        bitBuffer |= (code << bitCount);
+        bitCount += codeSize;
+        while (bitCount >= 8) {
+          bytes.push(bitBuffer & 0xff);
+          bitBuffer >>= 8;
+          bitCount -= 8;
+        }
+      }
+
+      function flushBits() {
+        if (bitCount > 0) bytes.push(bitBuffer & 0xff);
+        bitBuffer = 0;
+        bitCount = 0;
+      }
+
+      function resetDict() {
+        nextCode = endCode + 1;
+        codeSize = minCodeSize + 1;
+      }
+
+      const dict = new Map();
+      const makeKey = (prefix, k) => `${prefix},${k}`;
+
+      writeCode(clearCode);
+      let prefix = indices[0];
+      for (let i = 1; i < indices.length; i++) {
+        const k = indices[i];
+        const key = makeKey(prefix, k);
+        if (dict.has(key)) {
+          prefix = dict.get(key);
+        } else {
+          writeCode(prefix);
+          if (nextCode < 4096) {
+            dict.set(key, nextCode++);
+            if (nextCode === (1 << codeSize) && codeSize < 12) codeSize += 1;
+          } else {
+            writeCode(clearCode);
+            dict.clear();
+            resetDict();
+          }
+          prefix = k;
+        }
+      }
+      writeCode(prefix);
+      writeCode(endCode);
+      flushBits();
+
+      const blocks = [];
+      for (let i = 0; i < bytes.length; i += 255) {
+        const chunk = bytes.slice(i, i + 255);
+        blocks.push(chunk.length, ...chunk);
+      }
+      blocks.push(0);
+      return new Uint8Array(blocks);
+    }
+
+    function encodeGif(framesIndexed, width, height, delayCs) {
+      const out = [];
+      const pushByte = (v) => out.push(v & 0xff);
+      const pushWord = (v) => { pushByte(v & 0xff); pushByte((v >> 8) & 0xff); };
+      const pushText = (txt) => { for (let i = 0; i < txt.length; i++) pushByte(txt.charCodeAt(i)); };
+
+      pushText("GIF89a");
+      pushWord(width);
+      pushWord(height);
+      pushByte(0xF7);
+      pushByte(0);
+      pushByte(0);
+      for (let i = 0; i < GIF_PALETTE.length; i++) pushByte(GIF_PALETTE[i]);
+
+      pushByte(0x21); pushByte(0xFF); pushByte(0x0B); pushText("NETSCAPE2.0");
+      pushByte(0x03); pushByte(0x01); pushWord(0); pushByte(0x00);
+
+      for (const idxFrame of framesIndexed) {
+        pushByte(0x21); pushByte(0xF9); pushByte(0x04);
+        pushByte(0x08);
+        pushWord(delayCs);
+        pushByte(0x00);
+        pushByte(0x00);
+
+        pushByte(0x2C);
+        pushWord(0); pushWord(0);
+        pushWord(width); pushWord(height);
+        pushByte(0x00);
+
+        pushByte(0x08);
+        const data = lzwEncode(idxFrame, 8);
+        for (let i = 0; i < data.length; i++) pushByte(data[i]);
+      }
+
+      pushByte(0x3B);
+      return new Blob([new Uint8Array(out)], { type: "image/gif" });
+    }
+
+    async function export3DGif() {
+      if (!state.valid) return;
+      const frames = Math.max(8, Math.min(96, Number(el.gifFrames.value) || 24));
+      const origRotY = Number(el.rotY.value);
+      const origAuto = el.autoRotate.checked;
+      el.autoRotate.checked = false;
+      setExportInfo(`GIF: рендер кадров 0/${frames}...`);
+
+      const temp = document.createElement("canvas");
+      temp.width = 480;
+      temp.height = 480;
+      const tctx = temp.getContext("2d");
+      const indexedFrames = [];
+
+      for (let i = 0; i < frames; i++) {
+        const y = origRotY + (360 * i) / frames;
+        let normY = y;
+        while (normY > 180) normY -= 360;
+        while (normY < -180) normY += 360;
+        el.rotY.value = String(normY);
+        draw3D();
+        tctx.clearRect(0, 0, temp.width, temp.height);
+        tctx.drawImage(el.sceneCanvas, 0, 0, temp.width, temp.height);
+        const img = tctx.getImageData(0, 0, temp.width, temp.height);
+        indexedFrames.push(imageDataToIndexed(img));
+        setExportInfo(`GIF: рендер кадров ${i + 1}/${frames}...`);
+        await new Promise(r => setTimeout(r, 0));
+      }
+
+      const blob = encodeGif(indexedFrames, temp.width, temp.height, 6);
+      downloadBlob(blob, `mod79_scene_d${state.d}.gif`);
+      setExportInfo(`GIF готов: ${frames} кадров.`);
+
+      el.rotY.value = String(origRotY);
+      el.autoRotate.checked = origAuto;
+      draw3D();
+    }
+
+    el.gridCanvas.addEventListener("click", onGridClick);
+    el.sceneCanvas.addEventListener("wheel", onSceneWheel, { passive: false });
+    el.sceneCanvas.addEventListener("mousedown", onSceneMouseDown);
+    window.addEventListener("mousemove", onSceneMouseMove);
+    window.addEventListener("mouseup", onSceneMouseUp);
+    el.sceneCanvas.style.cursor = "grab";
+
+    window.addEventListener("resize", drawAll);
+
+    [
+      el.colorMode,
+      el.showFamily,
+      el.showStratum,
+      el.showLabels,
+      el.showDAxis3D,
+      el.showTorus3D,
+      el.drawWire,
+      el.autoRotate,
+      el.rotX,
+      el.rotY,
+      el.zoom,
+      el.viewScale,
+      el.step3d,
+      el.layerMode3d,
+      el.stratumLayer,
+      el.familyLayer,
+    ].forEach(node => node.addEventListener("input", () => {
+      updateLayerControls();
+      drawAll();
+    }));
+
+    el.resetViewBtn.addEventListener("click", resetView3D);
+
+    el.dscanStartBtn.addEventListener("click", startDScan);
+    el.dscanStopBtn.addEventListener("click", stopDScan);
+    el.dscanBestBtn.addEventListener("click", () => {
+      applyDValue(state.dscan.bestD, true);
+      drawAll();
+    });
+
+    el.storyMode.addEventListener("input", () => {
+      if (!el.storyMode.checked) {
+        stopStoryPlay();
+        if (state.presentation.playing) stopPresentationScene();
+      }
+      updateStoryInfo();
+      drawAll();
+    });
+    el.storyStep.addEventListener("input", () => {
+      updateStoryInfo();
+      drawAll();
+    });
+    el.storyPlayBtn.addEventListener("click", toggleStoryPlay);
+    el.storyNextBtn.addEventListener("click", nextStoryStep);
+
+    el.presentationMode.addEventListener("input", () => {
+      if (!el.presentationMode.checked) {
+        if (state.presentation.playing) stopPresentationScene();
+      } else {
+        el.storyMode.checked = true;
+      }
+      updateStoryInfo();
+      if (state.presentation.enabled && state.presentation.autoCamera) applyPresentationCameraInstant();
+      drawAll();
+    });
+    el.presentationAutoCamera.addEventListener("input", () => {
+      updateStoryInfo();
+      if (state.presentation.enabled && state.presentation.autoCamera) applyPresentationCameraInstant();
+      drawAll();
+    });
+    el.presentationPlayBtn.addEventListener("click", startPresentationScene);
+    el.presentationStopBtn.addEventListener("click", stopPresentationScene);
+
+    el.export2dBtn.addEventListener("click", () => exportCanvasPNG(el.gridCanvas, `mod79_grid_d${state.d}.png`));
+    el.export3dBtn.addEventListener("click", () => exportCanvasPNG(el.sceneCanvas, `mod79_scene_d${state.d}.png`));
+    el.exportGifBtn.addEventListener("click", () => {
+      export3DGif().catch((err) => setExportInfo(`GIF ошибка: ${String(err.message || err)}`));
+    });
+
+    el.rebuild.addEventListener("click", () => rebuildModel());
+    [el.n, el.p, el.a, el.b, el.gx, el.gy, el.d].forEach(node => {
+      node.addEventListener("keydown", (ev) => {
+        if (ev.key === "Enter") rebuildModel();
+      });
+    });
+
+    let lastAnimTs = performance.now();
+    function animate(ts) {
+      const dt = Math.min(0.08, Math.max(0, (ts - lastAnimTs) / 1000));
+      lastAnimTs = ts;
+      let needsRedraw = false;
+
+      if (state.presentation.enabled && state.presentation.autoCamera) {
+        const beforeRx = Number(el.rotX.value);
+        const beforeRy = Number(el.rotY.value);
+        const beforeVs = Number(el.viewScale.value);
+        const beforeZm = Number(el.zoom.value);
+        stepPresentationCamera(dt);
+        if (
+          Math.abs(Number(el.rotX.value) - beforeRx) > 0.001 ||
+          Math.abs(Number(el.rotY.value) - beforeRy) > 0.001 ||
+          Math.abs(Number(el.viewScale.value) - beforeVs) > 0.001 ||
+          Math.abs(Number(el.zoom.value) - beforeZm) > 0.001
+        ) {
+          needsRedraw = true;
+        }
+      }
+
+      if (el.autoRotate.checked && !state.isDragging3D) {
+        const cur = Number(el.rotY.value);
+        let next = cur + 24 * dt;
+        if (next > 180) next -= 360;
+        el.rotY.value = String(next);
+        needsRedraw = true;
+      }
+      if (needsRedraw) draw3D();
+      requestAnimationFrame(animate);
+    }
+
+    rebuildModel();
+    requestAnimationFrame(animate);
+  </script>
+</body>
+</html>
