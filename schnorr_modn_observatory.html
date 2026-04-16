@@ -1,0 +1,1527 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Schnorr (demo) — Hypercube (u_r=-e, u_z=s) Observatory</title>
+  <style>
+    :root {
+      --bg: #0c1118;
+      --panel: #141c27;
+      --panel-2: #1b2635;
+      --text: #e5ebf3;
+      --muted: #9fb1c8;
+      --accent: #22c55e;
+      --accent-2: #f59e0b;
+      --accent-3: #60a5fa;
+      --border: #2a3a50;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: radial-gradient(circle at 20% 10%, #152338, #0c1118 52%);
+      color: var(--text);
+      font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
+    }
+
+    .wrap {
+      max-width: 1600px;
+      margin: 0 auto;
+      padding: 16px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .panel {
+      background: linear-gradient(180deg, var(--panel), var(--panel-2));
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px;
+    }
+
+    .top {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr;
+      gap: 12px;
+    }
+
+    .controls {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(120px, 1fr));
+      gap: 8px;
+      align-items: end;
+    }
+
+    label {
+      display: grid;
+      gap: 4px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    input, select, button {
+      width: 100%;
+      border: 1px solid var(--border);
+      background: #0f1724;
+      color: var(--text);
+      border-radius: 8px;
+      padding: 7px 9px;
+      font-size: 13px;
+    }
+
+    button {
+      cursor: pointer;
+      background: #132338;
+      border-color: #27507f;
+    }
+
+    .toggles {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 14px;
+      margin-top: 8px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .toggles label {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      width: auto;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(130px, 1fr));
+      gap: 8px;
+    }
+
+    .stat {
+      padding: 8px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: #0f1826;
+    }
+
+    .stat .k {
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 2px;
+    }
+
+    .stat .v {
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .mid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 12px;
+      align-items: start;
+    }
+
+    canvas {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #0a1019;
+      display: block;
+    }
+
+    #gridCanvas {
+      aspect-ratio: 1 / 1;
+      image-rendering: pixelated;
+    }
+
+    #sceneCanvas {
+      aspect-ratio: 1 / 1;
+    }
+
+    #dscanCanvas {
+      width: 100%;
+      height: 170px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #0a1019;
+      display: block;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+
+    th, td {
+      border: 1px solid var(--border);
+      padding: 4px 6px;
+      text-align: center;
+    }
+
+    th {
+      background: #101c2c;
+      color: #c9d8ea;
+      position: sticky;
+      top: 0;
+    }
+
+    .small-note {
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 6px;
+      line-height: 1.35;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(100px, 1fr));
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .info-cell {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 6px;
+      background: #0e1724;
+      font-size: 12px;
+    }
+
+    .mono {
+      font-family: "IBM Plex Mono", "Consolas", monospace;
+    }
+
+    .theory-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(170px, 1fr));
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .theory-card {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #0e1724;
+      padding: 8px;
+      font-size: 12px;
+      line-height: 1.35;
+      color: #d3deee;
+    }
+
+    .theory-card .h {
+      font-size: 12px;
+      color: #9fb1c8;
+      margin-bottom: 4px;
+      font-weight: 700;
+    }
+
+    .formula {
+      margin-top: 8px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #0d1622;
+      padding: 8px;
+      font-family: "IBM Plex Mono", "Consolas", monospace;
+      font-size: 12px;
+      color: #e2ebf8;
+      white-space: pre-wrap;
+    }
+
+    @media (max-width: 1100px) {
+      .top, .mid { grid-template-columns: 1fr; }
+      .controls { grid-template-columns: repeat(2, minmax(120px, 1fr)); }
+      .theory-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="panel top">
+      <div>
+        <h2 style="margin:0 0 8px 0">Наблюдатель Шнорра (демо): <span class="mono">(u_r=-e, u_z=s) mod n</span></h2>
+        <div class="controls">
+          <label>n (order mod n)
+            <input id="nInput" type="number" min="3" value="79" />
+          </label>
+          <label>p (field p)
+            <input id="pInput" type="number" min="5" value="67" />
+          </label>
+          <label>a
+            <input id="aInput" type="number" value="0" />
+          </label>
+          <label>b
+            <input id="bInput" type="number" value="7" />
+          </label>
+          <label>Gx
+            <input id="gxInput" type="number" value="2" />
+          </label>
+          <label>Gy
+            <input id="gyInput" type="number" value="22" />
+          </label>
+          <label>d (секретный наклон)
+            <input id="dInput" type="number" min="0" value="14" />
+          </label>
+          <label>m (подписей)
+            <input id="mInput" type="number" min="8" value="220" />
+          </label>
+          <label>nonce families (k)
+            <input id="familiesInput" type="number" min="1" value="44" />
+          </label>
+          <label>seed (toy hash)
+            <input id="seedInput" type="number" value="1" />
+          </label>
+          <label>Sheet (BIP340‑style)
+            <select id="sheetMode">
+              <option value="off">off</option>
+              <option value="eveny">even‑y normalize</option>
+            </select>
+          </label>
+          <label>Story mode
+            <select id="storyStep">
+              <option value="1">1: формула</option>
+              <option value="2">2: наблюдения</option>
+              <option value="3">3: сдвиг/линии</option>
+              <option value="4" selected>4: strata/families</option>
+            </select>
+          </label>
+          <label>&nbsp;
+            <button id="rebuildBtn">Пересчитать</button>
+          </label>
+        </div>
+
+        <div class="toggles">
+          <label>Цвет:
+            <select id="colorMode" style="width:auto; min-width:140px;">
+              <option value="stratum">strata (по r=x([k]G) mod n)</option>
+              <option value="family">family (по k)</option>
+              <option value="sheet">sheet (±k)</option>
+              <option value="e">raw e</option>
+              <option value="s">raw s</option>
+            </select>
+          </label>
+          <label><input id="showObs" type="checkbox" checked /> показывать наблюдения</label>
+          <label><input id="showFamily" type="checkbox" checked /> подсветить family выбранной точки</label>
+          <label><input id="showStratum" type="checkbox" checked /> подсветить stratum выбранной точки</label>
+          <label><input id="showLabels" type="checkbox" /> подписи в ячейках</label>
+          <label><input id="autoRotate" type="checkbox" checked /> 3D: авто‑вращение</label>
+          <label><input id="showTorus3D" type="checkbox" /> 3D: тор</label>
+          <label><input id="showKAxis3D" type="checkbox" checked /> 3D: ось k (z=k)</label>
+          <label><input id="drawWire" type="checkbox" checked /> 3D: каркас</label>
+        </div>
+
+        <div class="small-note">
+          Это <b>учебная модель</b> Шнорра на малом модуле <span class="mono">n</span> и игрушечной кривой
+          <span class="mono">y²=x³+ax+b (mod p)</span>. Мы строим “универсальную карту”:
+          <span class="mono">R(u_r,u_z)=u_r·Q + u_z·G</span> и <span class="mono">r=x(R) mod n</span>.
+          <br />
+          Для Шнорра mapping: <span class="mono">u_r = -e</span>, <span class="mono">u_z = s</span>,
+          и тогда <span class="mono">k = (u_r·d + u_z) mod n = (s - e·d) mod n</span>.
+          Это объясняет, почему геометрия ECDSA и Шнорра “одна и та же”, а отличается только вход в таблицу.
+          <br />
+          Важно: это не secp256k1/BIP340 и не инструмент атак, только демонстрация структуры.
+        </div>
+      </div>
+
+      <div>
+        <div class="stats" id="statsBox"></div>
+        <div class="panel" style="margin-top:8px; padding:10px;">
+          <div style="font-size:13px; color:var(--muted); margin-bottom:6px;">Выбранная точка (ячейка сетки)</div>
+          <div class="info-grid" id="selectedInfo"></div>
+          <div class="small-note" id="selectedNote"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="mid">
+      <div class="panel">
+        <h3 style="margin:0 0 8px 0">2D таблица <span class="mono">u_r × u_z</span> (где <span class="mono">u_r=-e</span>, <span class="mono">u_z=s</span>)</h3>
+        <canvas id="gridCanvas" width="900" height="900"></canvas>
+        <div class="small-note" id="gridLegend"></div>
+      </div>
+
+      <div class="panel">
+        <h3 style="margin:0 0 8px 0">3D представление</h3>
+        <div class="controls" style="grid-template-columns:repeat(2,minmax(100px,1fr)); margin-bottom:8px;">
+          <label>Поворот X
+            <input id="rotX" type="range" min="-180" max="180" value="28" />
+          </label>
+          <label>Поворот Y
+            <input id="rotY" type="range" min="-180" max="180" value="-36" />
+          </label>
+          <label>Плотность точек
+            <input id="zoom" type="range" min="30" max="300" value="115" />
+          </label>
+          <label>Масштаб сцены
+            <input id="viewScale" type="range" min="30" max="300" value="130" />
+          </label>
+          <label>Шаг прорисовки (grid)
+            <input id="step3d" type="number" min="1" value="1" />
+          </label>
+          <label>Слой 3D
+            <select id="layerMode3d">
+              <option value="all">все</option>
+              <option value="stratum">только stratum</option>
+              <option value="family">только family</option>
+              <option value="obs">только observations</option>
+            </select>
+          </label>
+          <label>stratum index
+            <input id="stratumLayer" type="range" min="0" max="0" value="0" />
+          </label>
+          <label>family k
+            <input id="familyLayer" type="range" min="0" max="0" value="0" />
+          </label>
+        </div>
+        <canvas id="sceneCanvas" width="900" height="900"></canvas>
+        <div class="small-note" id="layer3dInfo"></div>
+        <div class="controls" style="grid-template-columns:repeat(2,minmax(100px,1fr)); margin-top:8px;">
+          <label>&nbsp;
+            <button id="export2dBtn">Экспорт 2D (PNG)</button>
+          </label>
+          <label>&nbsp;
+            <button id="export3dBtn">Экспорт 3D (PNG)</button>
+          </label>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h3 style="margin:0 0 8px 0">d-scan (toy resonance)</h3>
+      <div class="controls" style="grid-template-columns:repeat(4,minmax(120px,1fr)); margin-bottom:8px;">
+        <label>&nbsp;
+          <button id="dscanPlayBtn">Play d-scan</button>
+        </label>
+        <label>speed (ms)
+          <input id="dscanSpeed" type="number" min="20" max="2000" value="120" />
+        </label>
+        <label>cursor d
+          <input id="dscanCursor" type="number" min="0" value="0" />
+        </label>
+        <label>&nbsp;
+          <button id="dscanToDbtn">Set d = cursor</button>
+        </label>
+      </div>
+      <div class="small-note" id="dscanInfo"></div>
+      <canvas id="dscanCanvas" width="1200" height="170"></canvas>
+    </section>
+
+    <section class="panel">
+      <h3 style="margin:0 0 8px 0">Что Показывает Этот Файл</h3>
+      <div class="small-note">
+        Коротко: это демонстратор того, что в Шнорре геометрия гиперкуба линейная:
+        наблюдения в координатах <span class="mono">(e,s)</span> становятся прямыми в <span class="mono">(u_r=-e,u_z=s)</span>,
+        а nonce‑параметр <span class="mono">k</span> проявляется как “ось сдвига”.
+      </div>
+      <div class="theory-grid">
+        <div class="theory-card">
+          <div class="h">Mapping (Шнорр → гиперкуб)</div>
+          Проверка Шнорра: <span class="mono">s·G = R + e·Q</span>.<br />
+          В демо‑координатах: <span class="mono">u_z = s</span>, <span class="mono">u_r = -e</span>.<br />
+          Тогда <span class="mono">k = (u_r·d + u_z) mod n</span>.<br />
+          Важно: в реальном Шнорре нельзя выбирать <span class="mono">(e,s)</span> “как угодно” и ждать валидности:
+          <span class="mono">e</span> вычисляется из <span class="mono">R,Q,m</span> (challenge hash).
+        </div>
+        <div class="theory-card">
+          <div class="h">Линии (families)</div>
+          Фиксированный nonce‑family <span class="mono">k</span> задаёт прямую:
+          <span class="mono">s = k + e·d (mod n)</span>.<br />
+          В гиперкубе это “линия фиксированного t=k”.
+        </div>
+        <div class="theory-card">
+          <div class="h">Strata (по r)</div>
+          Здесь <span class="mono">r</span> берётся честно из “универсальной карты”:
+          <span class="mono">r = x([k]G) mod n</span>. Коллизии по <span class="mono">r</span> образуют strata.
+        </div>
+        <div class="theory-card">
+          <div class="h">d-scan (резонанс)</div>
+          d‑scan здесь учебный: score по согласованности
+          <span class="mono">e ?= H(rx(k(d)), Qx, msg)</span>, где <span class="mono">k(d)=(s - e·d) mod n</span>.
+        </div>
+        <div class="theory-card">
+          <div class="h">Что это НЕ делает</div>
+          Это не реализация BIP340 и не инструмент для атак на реальные кошельки.
+          Здесь малый <span class="mono">n</span> и toy‑hash: цель только в наглядности структуры.
+        </div>
+        <div class="theory-card">
+          <div class="h">“True numbers”</div>
+          Только целые по модулю: никакой нормализации, дробных порогов и “приведения к 1”.
+        </div>
+      </div>
+
+      <div class="formula">Формулы (демо):
+u_r = (-e) mod n
+u_z = s
+k = (u_r*d + u_z) mod n = (s - e*d) mod n
+r = x([k]G) mod n
+
+toy‑подпись (BIP340‑style идея, но не BIP340):
+R = [k]G (x‑only)
+e = H(rx, Qx, msg, seed) mod n
+s = (k + e*d) mod n
+</div>
+    </section>
+
+    <section class="panel">
+      <h3 style="margin:0 0 8px 0">Strata / Families (инварианты на наблюдениях)</h3>
+      <div style="max-height:360px; overflow:auto;" id="strataTableWrap"></div>
+      <div class="small-note">Таблица построена только по синтетическим наблюдениям (subset), инварианты не зависят от d-scan.</div>
+    </section>
+  </div>
+
+  <script>
+    "use strict";
+
+    const el = {
+      n: document.getElementById("nInput"),
+      p: document.getElementById("pInput"),
+      a: document.getElementById("aInput"),
+      b: document.getElementById("bInput"),
+      gx: document.getElementById("gxInput"),
+      gy: document.getElementById("gyInput"),
+      d: document.getElementById("dInput"),
+      m: document.getElementById("mInput"),
+      families: document.getElementById("familiesInput"),
+      seed: document.getElementById("seedInput"),
+      sheetMode: document.getElementById("sheetMode"),
+      storyStep: document.getElementById("storyStep"),
+      rebuild: document.getElementById("rebuildBtn"),
+      colorMode: document.getElementById("colorMode"),
+      showObs: document.getElementById("showObs"),
+      showFamily: document.getElementById("showFamily"),
+      showStratum: document.getElementById("showStratum"),
+      showLabels: document.getElementById("showLabels"),
+      autoRotate: document.getElementById("autoRotate"),
+      showTorus3D: document.getElementById("showTorus3D"),
+      showKAxis3D: document.getElementById("showKAxis3D"),
+      drawWire: document.getElementById("drawWire"),
+      rotX: document.getElementById("rotX"),
+      rotY: document.getElementById("rotY"),
+      zoom: document.getElementById("zoom"),
+      viewScale: document.getElementById("viewScale"),
+      step3d: document.getElementById("step3d"),
+      layerMode3d: document.getElementById("layerMode3d"),
+      stratumLayer: document.getElementById("stratumLayer"),
+      familyLayer: document.getElementById("familyLayer"),
+      gridCanvas: document.getElementById("gridCanvas"),
+      sceneCanvas: document.getElementById("sceneCanvas"),
+      dscanCanvas: document.getElementById("dscanCanvas"),
+      statsBox: document.getElementById("statsBox"),
+      selectedInfo: document.getElementById("selectedInfo"),
+      selectedNote: document.getElementById("selectedNote"),
+      gridLegend: document.getElementById("gridLegend"),
+      layer3dInfo: document.getElementById("layer3dInfo"),
+      dscanInfo: document.getElementById("dscanInfo"),
+      dscanPlayBtn: document.getElementById("dscanPlayBtn"),
+      dscanSpeed: document.getElementById("dscanSpeed"),
+      dscanCursor: document.getElementById("dscanCursor"),
+      dscanToDbtn: document.getElementById("dscanToDbtn"),
+      export2dBtn: document.getElementById("export2dBtn"),
+      export3dBtn: document.getElementById("export3dBtn"),
+      strataTableWrap: document.getElementById("strataTableWrap"),
+    };
+
+    const gridCtx = el.gridCanvas.getContext("2d");
+    const sceneCtx = el.sceneCanvas.getContext("2d");
+    const dscanCtx = el.dscanCanvas.getContext("2d");
+
+    const state = {
+      valid: false,
+      msg: "",
+      n: 79,
+      p: 67,
+      a: 0,
+      b: 7,
+      G: { x: 2, y: 22 },
+      Q: null,
+      d: 14,
+      m: 220,
+      families: 44,
+      seed: 1,
+      sheetMode: "off",
+      storyStep: 4,
+      selected: { ur: 0, uz: 0 },
+      anchor: { ur: 0, uz: 0 },
+      observations: [],
+      pointsByT: [],
+      row0R: [],
+      row0Y: [],
+      rToT: new Map(),
+      stratumColorKeys: [],
+      scanScores: [],
+      scanTop: [],
+      isDragging3D: false,
+      lastDragX: 0,
+      lastDragY: 0,
+      _autoAngle: 0,
+      _lastFrame: 0,
+      dscan: {
+        running: false,
+        timer: null,
+        cursorD: 0,
+        speedMs: 120,
+      },
+    };
+
+    function mod(a, n) {
+      const x = a % n;
+      return x < 0 ? x + n : x;
+    }
+
+    function clampInt(v, lo, hi) {
+      const x = Number(v);
+      if (!Number.isFinite(x)) return lo;
+      return Math.max(lo, Math.min(hi, Math.trunc(x)));
+    }
+
+    function prepareCanvas(canvas, ctx) {
+      const dpr = Math.min(2, window.devicePixelRatio || 1);
+      const rect = canvas.getBoundingClientRect();
+      const W = Math.max(1, rect.width);
+      const H = Math.max(1, rect.height);
+      const pixelW = Math.round(W * dpr);
+      const pixelH = Math.round(H * dpr);
+      if (canvas.width !== pixelW || canvas.height !== pixelH) {
+        canvas.width = pixelW;
+        canvas.height = pixelH;
+      }
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      return { W, H };
+    }
+
+    function egcd(a, b) {
+      let oldR = a, r = b;
+      let oldS = 1, s = 0;
+      let oldT = 0, t = 1;
+      while (r !== 0) {
+        const q = Math.floor(oldR / r);
+        [oldR, r] = [r, oldR - q * r];
+        [oldS, s] = [s, oldS - q * s];
+        [oldT, t] = [t, oldT - q * t];
+      }
+      return [Math.abs(oldR), oldS, oldT];
+    }
+
+    function inv(a, p) {
+      const aa = mod(a, p);
+      const [g, x] = egcd(aa, p);
+      if (g !== 1) throw new Error("inverse does not exist");
+      return mod(x, p);
+    }
+
+    function pointNeg(P) {
+      if (!P) return null;
+      return { x: P.x, y: mod(-P.y, state.p) };
+    }
+
+    function pointAdd(P, Q) {
+      const p = state.p;
+      const a = state.a;
+      if (!P) return Q;
+      if (!Q) return P;
+      if (P.x === Q.x && mod(P.y + Q.y, p) === 0) return null;
+
+      let m;
+      if (P.x === Q.x && P.y === Q.y) {
+        // doubling
+        const num = mod(3 * P.x * P.x + a, p);
+        const den = inv(mod(2 * P.y, p), p);
+        m = mod(num * den, p);
+      } else {
+        // addition
+        const num = mod(Q.y - P.y, p);
+        const den = inv(mod(Q.x - P.x, p), p);
+        m = mod(num * den, p);
+      }
+
+      const rx = mod(m * m - P.x - Q.x, p);
+      const ry = mod(m * (P.x - rx) - P.y, p);
+      return { x: rx, y: ry };
+    }
+
+    function scalarMul(k, P) {
+      let n = k;
+      let result = null;
+      let cur = P;
+      while (n > 0) {
+        if (n & 1) result = pointAdd(result, cur);
+        cur = pointAdd(cur, cur);
+        n >>= 1;
+      }
+      return result;
+    }
+
+    function isOnCurve(P) {
+      if (!P) return true;
+      const p = state.p;
+      const left = mod(P.y * P.y, p);
+      const right = mod(P.x * P.x * P.x + state.a * P.x + state.b, p);
+      return left === right;
+    }
+
+    function xorshift32(seed) {
+      let x = (seed | 0) || 1;
+      return () => {
+        x ^= x << 13;
+        x ^= x >>> 17;
+        x ^= x << 5;
+        return (x >>> 0);
+      };
+    }
+
+    function hash32_4(a, b, c, d) {
+      // Stable integer hash (not cryptographic). Good enough for a toy e=H(Rx,Qx,m) demo.
+      let x = 0x811c9dc5;
+      x ^= (a >>> 0); x = Math.imul(x, 0x01000193);
+      x ^= (b >>> 0); x = Math.imul(x, 0x01000193);
+      x ^= (c >>> 0); x = Math.imul(x, 0x01000193);
+      x ^= (d >>> 0); x = Math.imul(x, 0x01000193);
+      x ^= x >>> 16; x = Math.imul(x, 0x7feb352d);
+      x ^= x >>> 15; x = Math.imul(x, 0x846ca68b);
+      x ^= x >>> 16;
+      return x >>> 0;
+    }
+
+    function toyChallengeModN(rx, qx, msg, seed, n) {
+      return mod(hash32_4(rx | 0, qx | 0, msg | 0, seed | 0), n);
+    }
+
+    function cellData(ur, uz) {
+      // Core invariant: k = (u_r*d + u_z) mod n, where u_r=-e and u_z=s.
+      const t = mod(uz + ur * state.d, state.n);
+      const r = state.row0R[t];
+      const y = state.row0Y[t];
+      const e = mod(-ur, state.n);
+      const s = uz;
+      return { ur, uz, e, s, t, r, y };
+    }
+
+    function getColor(d) {
+      const mode = el.colorMode.value;
+      const n = state.n;
+      if (mode === "family") {
+        const h = Math.floor((d.t * 360) / n);
+        return `hsl(${h} 82% 55%)`;
+      }
+      if (mode === "sheet") {
+        if (d.y === 1) return "#16a34a";
+        if (d.y === -1) return "#f59e0b";
+        return "#9ca3af";
+      }
+      if (mode === "e") {
+        const v = Math.floor((d.e * 255) / Math.max(1, n - 1));
+        return `rgb(${v}, ${255 - v}, 170)`;
+      }
+      if (mode === "s") {
+        const v = Math.floor((d.s * 255) / Math.max(1, n - 1));
+        return `rgb(${180}, ${v}, ${255 - v})`;
+      }
+      const key = d.r === null ? "INF" : String(d.r);
+      const idx = state.stratumColorKeys.indexOf(key);
+      const h = Math.floor((idx * 360) / Math.max(1, state.stratumColorKeys.length));
+      return `hsl(${h} 78% 56%)`;
+    }
+
+    function rebuildModel() {
+      stopDScanPlay();
+      state.n = clampInt(el.n.value, 3, 4096);
+      state.p = clampInt(el.p.value, 5, 200000);
+      state.a = clampInt(el.a.value, -200000, 200000);
+      state.b = clampInt(el.b.value, -200000, 200000);
+      state.G = { x: clampInt(el.gx.value, -200000, 200000), y: clampInt(el.gy.value, -200000, 200000) };
+      state.d = mod(clampInt(el.d.value, 0, 1 << 30), state.n);
+      el.d.value = String(state.d);
+      state.m = clampInt(el.m.value, 8, 5000);
+      state.families = clampInt(el.families.value, 1, state.n);
+      state.seed = clampInt(el.seed.value, -0x7fffffff, 0x7fffffff);
+      state.sheetMode = String(el.sheetMode.value);
+      state.storyStep = clampInt(el.storyStep.value, 1, 4);
+
+      state.valid = true;
+      state.msg = "";
+
+      if (!Number.isInteger(state.n) || state.n < 3) {
+        state.valid = false;
+        state.msg = "n должно быть целым (n>=3).";
+      }
+      if (state.valid && (!Number.isInteger(state.p) || state.p < 5)) {
+        state.valid = false;
+        state.msg = "p должно быть целым (p>=5).";
+      }
+      if (!Number.isInteger(state.m) || state.m < 8) {
+        state.valid = false;
+        state.msg = "m должно быть целым (m>=8).";
+      }
+      if (!Number.isInteger(state.families) || state.families < 1) {
+        state.valid = false;
+        state.msg = "families должно быть целым (>=1).";
+      }
+
+      if (state.valid) {
+        if (!isOnCurve(state.G)) {
+          state.valid = false;
+          state.msg = "G не лежит на кривой y^2 = x^3 + ax + b (mod p).";
+        }
+      }
+
+      state.row0R = new Array(state.n).fill(0);
+      state.row0Y = new Array(state.n).fill(0);
+      state.rToT = new Map();
+      state.pointsByT = new Array(state.n).fill(null);
+      state.Q = null;
+
+      if (state.valid) {
+        try {
+          state.pointsByT[0] = null;
+          for (let t = 1; t < state.n; t++) {
+            state.pointsByT[t] = pointAdd(state.pointsByT[t - 1], state.G);
+          }
+          state.Q = scalarMul(state.d, state.G);
+
+          for (let t = 0; t < state.n; t++) {
+            const P = state.pointsByT[t];
+            const r = P ? mod(P.x, state.n) : null;
+            state.row0R[t] = r;
+            state.row0Y[t] = P ? ((P.y % 2 === 0) ? 1 : -1) : 0;
+            const key = r === null ? "INF" : String(r);
+            if (!state.rToT.has(key)) state.rToT.set(key, []);
+            state.rToT.get(key).push(t);
+          }
+          state.stratumColorKeys = [...state.rToT.keys()].sort((a, b) => {
+            if (a === "INF") return -1;
+            if (b === "INF") return 1;
+            return Number(a) - Number(b);
+          });
+        } catch (err) {
+          state.valid = false;
+          state.msg = "Ошибка построения таблицы: проверьте параметры кривой (p,a,b,G) и взаимную обратимость.";
+        }
+      } else {
+        state.stratumColorKeys = [];
+      }
+
+      // Build synthetic observations: (msg,e,s,k_true,u_r,u_z,t,r, sheet).
+      state.observations = [];
+      if (state.valid) {
+        const rnd = xorshift32(state.seed ^ (state.n * 2654435761));
+        const baseKs = [];
+        const used = new Set();
+        while (baseKs.length < state.families && used.size < Math.max(1, state.n - 1)) {
+          const k = mod(rnd(), state.n);
+          if (k === 0) continue;
+          if (used.has(k)) continue;
+          used.add(k);
+          baseKs.push(k);
+        }
+        for (let i = 0; i < state.m; i++) {
+          const msg = i;
+          const famIdx = mod(i + (rnd() % 13), baseKs.length);
+          let k = baseKs[famIdx] || 1;
+          let sheet = 0;
+          let R = state.pointsByT[k];
+          if (state.sheetMode === "eveny") {
+            if (R && (R.y % 2 !== 0)) {
+              k = mod(-k, state.n);
+              R = pointNeg(R);
+              sheet = -1;
+            } else {
+              sheet = 1;
+            }
+          }
+          const rx = R ? mod(R.x, state.n) : 0;
+          const qx = state.Q ? mod(state.Q.x, state.n) : 0;
+          const e = toyChallengeModN(rx, qx, msg, state.seed, state.n);
+          const s = mod(k + e * state.d, state.n);
+          const ur = mod(-e, state.n);
+          const uz = s;
+          const t = mod(uz + ur * state.d, state.n);
+          const r = state.row0R[t];
+          state.observations.push({ msg, e, s, k, ur, uz, t, r, sheet, rx, qx });
+        }
+      }
+
+      state.selected = { ur: 0, uz: 0 };
+      state.anchor = { ur: 0, uz: 0 };
+      state.dscan.cursorD = mod(state.d, Math.max(1, state.n));
+
+      drawAll();
+      fillStats();
+      fillSelectedInfo();
+      fillStrataTable();
+      updateLayerControls();
+      updateDScanControls();
+    }
+
+    function fillStats() {
+      const n = state.n;
+      const families = new Set(state.observations.map(o => o.t));
+      const strata = new Set(state.observations.map(o => o.r));
+      const obs = state.observations.length;
+      const cards = [
+        ["n (mod n)", String(n)],
+        ["p (field)", String(state.p)],
+        ["d (наклон)", String(state.d)],
+        ["G", `${state.G.x},${state.G.y}`],
+        ["Q=dG", state.Q ? `${state.Q.x},${state.Q.y}` : "INF"],
+        ["observations", String(obs)],
+        ["unique families (k)", String(families.size)],
+        ["unique strata (r)", String(strata.size)],
+        ["sheet mode", String(state.sheetMode)],
+      ];
+      el.statsBox.innerHTML = cards.map(([k, v]) =>
+        `<div class="stat"><div class="k">${k}</div><div class="v">${v}</div></div>`
+      ).join("");
+    }
+
+    function fillSelectedInfo() {
+      if (!state.valid) {
+        el.selectedInfo.innerHTML = "";
+        el.selectedNote.textContent = state.msg;
+        return;
+      }
+      const d = cellData(state.selected.ur, state.selected.uz);
+      const matched = state.observations.filter(o => o.ur === d.ur && o.uz === d.uz);
+      const matchTxt = matched.length ? `${matched.length} obs` : "нет";
+      const cells = [
+        ["u_r", d.ur],
+        ["u_z", d.uz],
+        ["e", d.e],
+        ["s", d.s],
+        ["k=t", d.t],
+        ["rx=r", d.r === null ? "INF" : d.r],
+        ["sheet(y)", d.y],
+        ["obs@cell", matchTxt],
+      ];
+      el.selectedInfo.innerHTML = cells.map(([k, v]) =>
+        `<div class="info-cell"><div class="mono">${k}</div><div style="font-weight:700">${v}</div></div>`
+      ).join("");
+
+      const noteParts = [];
+      noteParts.push(`Mapping: u_r=-e, u_z=s. Здесь e=${d.e}, s=${d.s}.`);
+      noteParts.push(`Инвариант: k=(s - e·d) mod ${state.n} = ${d.t}.`);
+      if (matched.length) noteParts.push(`Эта ячейка совпала с наблюдением msg=${matched[0].msg}.`);
+      el.selectedNote.textContent = noteParts.join(" ");
+    }
+
+    function draw2D() {
+      const { W, H } = prepareCanvas(el.gridCanvas, gridCtx);
+      gridCtx.clearRect(0, 0, W, H);
+
+      if (!state.valid) {
+        drawCenterText(gridCtx, W, H, state.msg);
+        return;
+      }
+
+      const n = state.n;
+      const step = n > 241 ? Math.ceil(n / 241) : 1; // keep 2D render responsive for large n
+      const cellW = W / n;
+      const cellH = H / n;
+      const story = state.storyStep;
+
+      // Draw base grid cells.
+      for (let ur = 0; ur < n; ur += step) {
+        for (let uz = 0; uz < n; uz += step) {
+          const d = cellData(ur, uz);
+          gridCtx.fillStyle = getColor(d);
+          gridCtx.fillRect(uz * cellW, ur * cellH, cellW * step + 0.5, cellH * step + 0.5);
+        }
+      }
+
+      // Family / stratum highlights (as lines in the grid).
+      const sel = cellData(state.selected.ur, state.selected.uz);
+      if (el.showFamily.checked) {
+        gridCtx.strokeStyle = "rgba(34,197,94,0.85)";
+        gridCtx.lineWidth = Math.max(1, Math.min(2.4, cellW * 0.18));
+        gridCtx.beginPath();
+        for (let ur = 0; ur < n; ur++) {
+          const uz = mod(sel.t - ur * state.d, n);
+          const x = (uz + 0.5) * cellW;
+          const y = (ur + 0.5) * cellH;
+          if (ur === 0) gridCtx.moveTo(x, y);
+          else gridCtx.lineTo(x, y);
+        }
+        gridCtx.stroke();
+      }
+      if (el.showStratum.checked) {
+        const tList = state.rToT.get(String(sel.r)) || [];
+        gridCtx.strokeStyle = "rgba(96,165,250,0.75)";
+        gridCtx.lineWidth = Math.max(1, Math.min(2.0, cellW * 0.14));
+        for (const t of tList) {
+          gridCtx.beginPath();
+          for (let ur = 0; ur < n; ur++) {
+            const uz = mod(t - ur * state.d, n);
+            const x = (uz + 0.5) * cellW;
+            const y = (ur + 0.5) * cellH;
+            if (ur === 0) gridCtx.moveTo(x, y);
+            else gridCtx.lineTo(x, y);
+          }
+          gridCtx.stroke();
+        }
+      }
+
+      // Observations overlay.
+      if (el.showObs.checked) {
+        gridCtx.fillStyle = "rgba(7,10,15,0.0)";
+        for (const o of state.observations) {
+          const x = (o.uz + 0.5) * cellW;
+          const y = (o.ur + 0.5) * cellH;
+          gridCtx.beginPath();
+          gridCtx.fillStyle = "rgba(8, 12, 18, 0.25)";
+          gridCtx.arc(x, y, Math.max(1.4, Math.min(4.2, cellW * 0.22)), 0, Math.PI * 2);
+          gridCtx.fill();
+          gridCtx.lineWidth = 1.2;
+          gridCtx.strokeStyle = "#e2e8f0";
+          gridCtx.stroke();
+        }
+      }
+
+      if (el.showLabels.checked && step === 1) {
+        gridCtx.fillStyle = "rgba(255,255,255,0.70)";
+        gridCtx.font = `${Math.max(9, Math.floor(cellW * 0.28))}px IBM Plex Mono, monospace`;
+        gridCtx.textAlign = "center";
+        gridCtx.textBaseline = "middle";
+        const maxText = n <= 61 ? 2 : 1;
+        for (let ur = 0; ur < n; ur++) {
+          for (let uz = 0; uz < n; uz++) {
+            const d = cellData(ur, uz);
+            const text = String(d.t);
+            if (text.length > maxText && n > 45) continue;
+            gridCtx.fillText(text, (uz + 0.5) * cellW, (ur + 0.5) * cellH);
+          }
+        }
+        gridCtx.textAlign = "start";
+        gridCtx.textBaseline = "alphabetic";
+      }
+
+      // Selection box.
+      const sx = state.selected.uz * cellW;
+      const sy = state.selected.ur * cellH;
+      gridCtx.lineWidth = 2.2;
+      gridCtx.strokeStyle = "#22d3ee";
+      gridCtx.strokeRect(sx + 0.5, sy + 0.5, cellW - 1, cellH - 1);
+
+      // Axes labels.
+      gridCtx.fillStyle = "#c7d2e5";
+      gridCtx.font = "12px IBM Plex Mono, monospace";
+      gridCtx.fillText("u_z (s) →", W - 88, H - 7);
+      gridCtx.save();
+      gridCtx.translate(7, 70);
+      gridCtx.rotate(-Math.PI / 2);
+      gridCtx.fillText("u_r (-e) →", 0, 0);
+      gridCtx.restore();
+
+      // Story overlays.
+      if (story === 1) {
+        gridCtx.fillStyle = "rgba(7,10,15,0.72)";
+        gridCtx.fillRect(8, 8, Math.min(520, W - 16), 66);
+        gridCtx.fillStyle = "#dbeafe";
+        gridCtx.font = "13px IBM Plex Mono, monospace";
+        gridCtx.fillText("Schnorr: s = k + e·d  (mod n)", 16, 28);
+        gridCtx.fillText("Mapping: u_r=-e, u_z=s  =>  k = (u_r·d + u_z) mod n", 16, 48);
+      } else if (story === 2) {
+        gridCtx.fillStyle = "rgba(7,10,15,0.55)";
+        gridCtx.fillRect(8, 8, Math.min(360, W - 16), 44);
+        gridCtx.fillStyle = "#dbeafe";
+        gridCtx.font = "13px IBM Plex Mono, monospace";
+        gridCtx.fillText("Observations overlay (synthetic)", 16, 34);
+      } else if (story === 3) {
+        gridCtx.fillStyle = "rgba(7,10,15,0.55)";
+        gridCtx.fillRect(8, 8, Math.min(520, W - 16), 44);
+        gridCtx.fillStyle = "#dbeafe";
+        gridCtx.font = "13px IBM Plex Mono, monospace";
+        gridCtx.fillText("Family = fixed k: a straight line in (e,s)", 16, 34);
+      }
+
+      el.gridLegend.textContent =
+        `Grid shows implied k=t=(s - e·d) mod ${n}. Color mode=${el.colorMode.value}. ` +
+        `Click: select cell; shift‑click: set anchor (for your own notes).`;
+    }
+
+    function draw3D() {
+      const { W, H } = prepareCanvas(el.sceneCanvas, sceneCtx);
+      sceneCtx.clearRect(0, 0, W, H);
+
+      if (!state.valid) {
+        drawCenterText(sceneCtx, W, H, state.msg);
+        return;
+      }
+
+      const showK = el.showKAxis3D.checked;
+      const showT = el.showTorus3D.checked;
+      if (!showK && !showT) {
+        drawCenterText(sceneCtx, W, H, "Включите 3D: ось k и/или тор.");
+        return;
+      }
+
+      let rx = Number(el.rotX.value) * Math.PI / 180;
+      let ry = Number(el.rotY.value) * Math.PI / 180;
+      const pointDensity = Number(el.zoom.value) / 100;
+      const viewScale = Number(el.viewScale.value) / 100;
+      const step = Math.max(1, Number(el.step3d.value) || 1);
+      const n = state.n;
+      const layerMode = el.layerMode3d.value;
+      const stratumKey = getSelectedStratumKeyByIndex(Number(el.stratumLayer.value));
+      const familyT = Number(el.familyLayer.value);
+
+      function rotate(v) {
+        const cy = Math.cos(ry), sy = Math.sin(ry);
+        const cx = Math.cos(rx), sx = Math.sin(rx);
+
+        let x = v.x;
+        let y = v.y;
+        let z = v.z;
+
+        const x1 = x * cy + z * sy;
+        const z1 = -x * sy + z * cy;
+
+        const y2 = y * cx - z1 * sx;
+        const z2 = y * sx + z1 * cx;
+
+        return { x: x1, y: y2, z: z2 };
+      }
+
+      function project(v) {
+        const dist = 340;
+        const k = dist / (dist + v.z * 0.9);
+        return { x: W / 2 + v.x * k, y: H / 2 - v.y * k, k };
+      }
+
+      function drawAxis() {
+        const s = (n / 2) * viewScale;
+        const axes = [
+          [{ x: -s, y: -s, z: -s }, { x: s, y: -s, z: -s }, "#60a5fa", "u_z (s)"],
+          [{ x: -s, y: -s, z: -s }, { x: -s, y: s, z: -s }, "#22c55e", "u_r (-e)"],
+          [{ x: -s, y: -s, z: -s }, { x: -s, y: -s, z: s }, "#f59e0b", "k (nonce)"],
+        ];
+        for (const [a, b, c, label] of axes) {
+          const ra = project(rotate(a));
+          const rb = project(rotate(b));
+          sceneCtx.strokeStyle = c;
+          sceneCtx.lineWidth = 2;
+          sceneCtx.beginPath();
+          sceneCtx.moveTo(ra.x, ra.y);
+          sceneCtx.lineTo(rb.x, rb.y);
+          sceneCtx.stroke();
+          sceneCtx.fillStyle = c;
+          sceneCtx.font = "12px IBM Plex Mono, monospace";
+          sceneCtx.fillText(label, rb.x + 4, rb.y + 2);
+        }
+      }
+
+      if (showK && el.drawWire.checked) drawAxis();
+
+      const points = [];
+      // Grid points (optional, dense).
+      if (layerMode !== "obs") {
+        for (let ur = 0; ur < n; ur += step) {
+          for (let uz = 0; uz < n; uz += step) {
+            const d = cellData(ur, uz);
+            const key = String(d.r);
+            if (layerMode === "stratum" && key !== stratumKey) continue;
+            if (layerMode === "family" && d.t !== familyT) continue;
+
+            if (showK) {
+              const vx = (uz - n / 2) * viewScale;
+              const vy = (ur - n / 2) * viewScale;
+              const vz = (d.t - n / 2) * viewScale;
+              points.push({ v: { x: vx, y: vy, z: vz }, color: getColor(d), isSel: ur === state.selected.ur && uz === state.selected.uz });
+            }
+            if (showT) {
+              const phi = 2 * Math.PI * ur / n;
+              const theta = 2 * Math.PI * uz / n;
+              const R = n * 0.26 * viewScale;
+              const r = n * 0.11 * viewScale;
+              const tx = (R + r * Math.cos(theta)) * Math.cos(phi);
+              const ty = (R + r * Math.cos(theta)) * Math.sin(phi);
+              const tz = r * Math.sin(theta);
+              points.push({ v: { x: tx, y: ty, z: tz }, color: getColor(d), isSel: false });
+            }
+          }
+        }
+      }
+
+      // Observations (always).
+      if (el.showObs.checked) {
+        for (const o of state.observations) {
+          const d = cellData(o.ur, o.uz);
+          if (layerMode === "stratum" && String(d.r) !== stratumKey) continue;
+          if (layerMode === "family" && d.t !== familyT) continue;
+          const vx = (o.uz - n / 2) * viewScale;
+          const vy = (o.ur - n / 2) * viewScale;
+          const vz = (o.t - n / 2) * viewScale;
+          points.push({ v: { x: vx, y: vy, z: vz }, color: "#e2e8f0", isObs: true, isSel: o.ur === state.selected.ur && o.uz === state.selected.uz });
+        }
+      }
+
+      points.sort((a, b) => rotate(a.v).z - rotate(b.v).z);
+
+      for (const p of points) {
+        const pr = project(rotate(p.v));
+        const base = p.isObs ? 2.4 : 1.8;
+        const radius = Math.max(1, base * pr.k * pointDensity);
+        sceneCtx.beginPath();
+        sceneCtx.fillStyle = p.color;
+        sceneCtx.arc(pr.x, pr.y, radius, 0, Math.PI * 2);
+        sceneCtx.fill();
+        if (p.isObs) {
+          sceneCtx.lineWidth = 1.2;
+          sceneCtx.strokeStyle = "rgba(34,197,94,0.9)";
+          sceneCtx.stroke();
+        } else if (p.isSel) {
+          sceneCtx.lineWidth = 1.8;
+          sceneCtx.strokeStyle = "#e2e8f0";
+          sceneCtx.stroke();
+        }
+      }
+
+      sceneCtx.fillStyle = "#cdd8ea";
+      sceneCtx.font = "12px IBM Plex Mono, monospace";
+      sceneCtx.fillText(`mode=${layerMode}; grid-step=${step}; obs=${el.showObs.checked ? "on" : "off"}`, 10, 18);
+    }
+
+    function getSelectedStratumKeyByIndex(index) {
+      const keys = state.stratumColorKeys;
+      if (!keys.length) return "0";
+      const i = mod(index, keys.length);
+      return keys[i];
+    }
+
+    function updateLayerControls() {
+      const strataCount = Math.max(1, state.stratumColorKeys.length);
+      el.stratumLayer.max = String(strataCount - 1);
+      if (Number(el.stratumLayer.value) > strataCount - 1) el.stratumLayer.value = "0";
+
+      const famMax = Math.max(0, state.n - 1);
+      el.familyLayer.max = String(famMax);
+      if (Number(el.familyLayer.value) > famMax) el.familyLayer.value = "0";
+
+      const skey = getSelectedStratumKeyByIndex(Number(el.stratumLayer.value));
+      const fam = Number(el.familyLayer.value);
+      const tList = state.rToT.get(skey) || [];
+      el.layer3dInfo.textContent =
+        `Layer=${el.layerMode3d.value}; stratum r=${skey} (families k: ${tList.join(", ") || "-" }); family k=${fam}. ` +
+        `Mouse: wheel=scale, drag=rotate.`;
+    }
+
+    function updateDScanControls() {
+      const n = Math.max(1, state.n);
+      el.dscanCursor.min = "0";
+      el.dscanCursor.max = String(n - 1);
+      state.dscan.cursorD = mod(state.dscan.cursorD, n);
+      el.dscanCursor.value = String(state.dscan.cursorD);
+      el.dscanSpeed.value = String(state.dscan.speedMs);
+    }
+
+    function drawDScan() {
+      const { W, H } = prepareCanvas(el.dscanCanvas, dscanCtx);
+      dscanCtx.clearRect(0, 0, W, H);
+      if (!state.valid) {
+        drawCenterText(dscanCtx, W, H, "Нет данных.");
+        return;
+      }
+
+      const n = state.n;
+      const obs = state.observations;
+      if (!obs.length) {
+        drawCenterText(dscanCtx, W, H, "Нет наблюдений.");
+        return;
+      }
+
+      // Safety: d-scan is O(n*m). Keep it honest: if it's too large, require smaller parameters.
+      const maxOps = 8_000_000;
+      const ops = n * obs.length;
+      if (ops > maxOps) {
+        stopDScanPlay();
+        el.dscanInfo.textContent =
+          `d-scan отключен: n*m=${ops} > ${maxOps}. Уменьшите n или m, чтобы построить scan честно.`;
+        drawCenterText(dscanCtx, W, H, "d-scan disabled: reduce n or m");
+        return;
+      }
+
+      const scores = new Array(n).fill(0);
+      const qx = state.Q ? mod(state.Q.x, n) : 0;
+      for (let d = 0; d < n; d++) {
+        let ok = 0;
+        for (const o of obs) {
+          let k = mod(o.s - o.e * d, n);
+          let R = state.pointsByT[k];
+          if (state.sheetMode === "eveny") {
+            if (R && (R.y % 2 !== 0)) {
+              k = mod(-k, n);
+              R = pointNeg(R);
+            }
+          }
+          const rx = R ? mod(R.x, n) : 0;
+          const e2 = toyChallengeModN(rx, qx, o.msg, state.seed, n);
+          if (e2 === o.e) ok++;
+        }
+        scores[d] = ok;
+      }
+      state.scanScores = scores;
+
+      const maxScore = Math.max(1, ...scores);
+      const barW = W / n;
+      for (let d = 0; d < n; d++) {
+        const h = (scores[d] / maxScore) * (H - 28);
+        const x = d * barW;
+        const y = H - 18 - h;
+        const hue = Math.floor((scores[d] / maxScore) * 120);
+        dscanCtx.fillStyle = `hsl(${hue} 80% 55%)`;
+        dscanCtx.fillRect(x, y, Math.max(1, barW - 0.5), h);
+      }
+
+      // Mark current d.
+      const x0 = state.d * barW;
+      dscanCtx.strokeStyle = "#e2e8f0";
+      dscanCtx.lineWidth = 2;
+      dscanCtx.strokeRect(x0 + 0.5, 10.5, Math.max(1, barW - 1), H - 30);
+
+      // Mark cursor d (scan sweep).
+      const cursorD = mod(state.dscan.cursorD, n);
+      const xc = cursorD * barW;
+      dscanCtx.strokeStyle = "rgba(34,197,94,0.95)";
+      dscanCtx.lineWidth = 2;
+      dscanCtx.strokeRect(xc + 0.5, 10.5, Math.max(1, barW - 1), H - 30);
+
+      // Top-3
+      const ranked = scores.map((s, d) => ({ d, s })).sort((a, b) => b.s - a.s || a.d - b.d);
+      state.scanTop = ranked.slice(0, 3);
+      dscanCtx.fillStyle = "#cdd8ea";
+      dscanCtx.font = "12px IBM Plex Mono, monospace";
+      dscanCtx.fillText(`d-scan score (toy): matches of e == H(rx(k(d)), Qx, msg). max=${maxScore}/${obs.length}`, 10, 16);
+      dscanCtx.fillText(`Top: ${state.scanTop.map(x => `d=${x.d}(${x.s})`).join("  ")}`, 10, H - 6);
+
+      el.dscanInfo.textContent =
+        `d=${state.d} (white) | cursor=${cursorD} score=${scores[cursorD]}/${obs.length} (green). ` +
+        `В toy-модели e зависит от rx и Qx. Это учебная визуализация.`;
+    }
+
+    function fillStrataTable() {
+      if (!state.valid) {
+        el.strataTableWrap.innerHTML = "";
+        return;
+      }
+      const byR = new Map();
+      for (const o of state.observations) {
+        const key = o.r === null ? "INF" : String(o.r);
+        if (!byR.has(key)) byR.set(key, { rKey: key, r: o.r, families: new Map(), count: 0 });
+        const rec = byR.get(key);
+        rec.count += 1;
+        if (!rec.families.has(o.t)) rec.families.set(o.t, 0);
+        rec.families.set(o.t, rec.families.get(o.t) + 1);
+      }
+      const rows = [...byR.values()].sort((a, b) => {
+        const ar = a.r === null ? -1 : Number(a.r);
+        const br = b.r === null ? -1 : Number(b.r);
+        return ar - br;
+      });
+      let html = "<table><thead><tr>" +
+        "<th>stratum r</th><th>#families k</th><th>families k (count)</th><th>obs in stratum</th>" +
+        "</tr></thead><tbody>";
+      for (const row of rows) {
+        const famKeys = [...row.families.entries()].sort((a, b) => a[0] - b[0]);
+        const famTxt = famKeys.map(([k, c]) => `${k}:${c}`).join(", ");
+        const rTxt = row.r === null ? "INF" : String(row.r);
+        html += `<tr><td>${rTxt}</td><td>${row.families.size}</td><td class="mono">${famTxt}</td><td>${row.count}</td></tr>`;
+      }
+      html += "</tbody></table>";
+      el.strataTableWrap.innerHTML = html;
+    }
+
+    function drawCenterText(ctx, w, h, text) {
+      ctx.fillStyle = "#95a6be";
+      ctx.font = "15px IBM Plex Sans, sans-serif";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText(String(text), w / 2, h / 2);
+      ctx.textAlign = "start";
+      ctx.textBaseline = "alphabetic";
+    }
+
+    function drawAll() {
+      draw2D();
+      draw3D();
+      drawDScan();
+      updateLayerControls();
+    }
+
+    function onGridClick(ev) {
+      if (!state.valid) return;
+      const rect = el.gridCanvas.getBoundingClientRect();
+      const x = ev.clientX - rect.left;
+      const y = ev.clientY - rect.top;
+      const uz = Math.floor((x / rect.width) * state.n);
+      const ur = Math.floor((y / rect.height) * state.n);
+      if (uz < 0 || uz >= state.n || ur < 0 || ur >= state.n) return;
+      if (ev.shiftKey) state.anchor = { ur, uz };
+      else state.selected = { ur, uz };
+      fillSelectedInfo();
+      drawAll();
+    }
+
+    function onSceneWheel(ev) {
+      ev.preventDefault();
+      const cur = Number(el.viewScale.value);
+      const next = Math.max(30, Math.min(300, cur + (ev.deltaY < 0 ? 8 : -8)));
+      el.viewScale.value = String(next);
+      draw3D();
+      updateLayerControls();
+    }
+
+    function onSceneMouseDown(ev) {
+      state.isDragging3D = true;
+      state.lastDragX = ev.clientX;
+      state.lastDragY = ev.clientY;
+      el.sceneCanvas.style.cursor = "grabbing";
+    }
+
+    function onSceneMouseMove(ev) {
+      if (!state.isDragging3D) return;
+      const dx = ev.clientX - state.lastDragX;
+      const dy = ev.clientY - state.lastDragY;
+      state.lastDragX = ev.clientX;
+      state.lastDragY = ev.clientY;
+      let rx = Number(el.rotX.value) - dy * 0.35;
+      let ry = Number(el.rotY.value) + dx * 0.35;
+      if (rx > 180) rx -= 360;
+      if (rx < -180) rx += 360;
+      if (ry > 180) ry -= 360;
+      if (ry < -180) ry += 360;
+      el.rotX.value = String(rx);
+      el.rotY.value = String(ry);
+      draw3D();
+    }
+
+    function onSceneMouseUp() {
+      state.isDragging3D = false;
+      el.sceneCanvas.style.cursor = "grab";
+    }
+
+    function exportCanvasPNG(canvas, filename) {
+      const link = document.createElement("a");
+      link.download = filename;
+      link.href = canvas.toDataURL("image/png");
+      link.click();
+    }
+
+    // Wiring.
+    el.rebuild.addEventListener("click", () => rebuildModel());
+
+    window.addEventListener("resize", drawAll);
+
+    [
+      el.colorMode,
+      el.showObs,
+      el.showFamily,
+      el.showStratum,
+      el.showLabels,
+      el.showTorus3D,
+      el.showKAxis3D,
+      el.drawWire,
+      el.autoRotate,
+      el.rotX,
+      el.rotY,
+      el.zoom,
+      el.viewScale,
+      el.step3d,
+      el.layerMode3d,
+      el.stratumLayer,
+      el.familyLayer,
+    ].forEach(node => node.addEventListener("input", () => {
+      updateLayerControls();
+      drawAll();
+    }));
+
+    el.storyStep.addEventListener("input", () => {
+      state.storyStep = clampInt(el.storyStep.value, 1, 4);
+      drawAll();
+    });
+
+    el.gridCanvas.addEventListener("click", onGridClick);
+    el.sceneCanvas.addEventListener("wheel", onSceneWheel, { passive: false });
+    el.sceneCanvas.addEventListener("mousedown", onSceneMouseDown);
+    window.addEventListener("mousemove", onSceneMouseMove);
+    window.addEventListener("mouseup", onSceneMouseUp);
+    el.sceneCanvas.style.cursor = "grab";
+
+    el.export2dBtn.addEventListener("click", () => exportCanvasPNG(el.gridCanvas, `schnorr_grid_d${state.d}.png`));
+    el.export3dBtn.addEventListener("click", () => exportCanvasPNG(el.sceneCanvas, `schnorr_scene_d${state.d}.png`));
+
+    function stopDScanPlay() {
+      state.dscan.running = false;
+      if (state.dscan.timer) {
+        clearInterval(state.dscan.timer);
+        state.dscan.timer = null;
+      }
+      el.dscanPlayBtn.textContent = "Play d-scan";
+    }
+
+    function startDScanPlay() {
+      stopDScanPlay();
+      state.dscan.running = true;
+      el.dscanPlayBtn.textContent = "Stop d-scan";
+      state.dscan.timer = setInterval(() => {
+        state.dscan.cursorD = mod(state.dscan.cursorD + 1, state.n);
+        el.dscanCursor.value = String(state.dscan.cursorD);
+        drawDScan();
+      }, state.dscan.speedMs);
+    }
+
+    el.dscanPlayBtn.addEventListener("click", () => {
+      if (state.dscan.running) stopDScanPlay();
+      else startDScanPlay();
+    });
+
+    el.dscanSpeed.addEventListener("change", () => {
+      state.dscan.speedMs = clampInt(el.dscanSpeed.value, 20, 2000);
+      el.dscanSpeed.value = String(state.dscan.speedMs);
+      if (state.dscan.running) startDScanPlay();
+    });
+
+    el.dscanCursor.addEventListener("change", () => {
+      state.dscan.cursorD = mod(clampInt(el.dscanCursor.value, 0, 1 << 30), state.n);
+      el.dscanCursor.value = String(state.dscan.cursorD);
+      drawDScan();
+    });
+
+    el.dscanToDbtn.addEventListener("click", () => {
+      state.d = mod(state.dscan.cursorD, state.n);
+      el.d.value = String(state.d);
+      rebuildModel();
+    });
+
+    [el.n, el.p, el.a, el.b, el.gx, el.gy, el.d, el.m, el.families, el.seed].forEach(node => {
+      node.addEventListener("keydown", (ev) => {
+        if (ev.key === "Enter") rebuildModel();
+      });
+    });
+
+    // Initial build.
+    let lastAnimTs = performance.now();
+    function animate(ts) {
+      const dt = Math.min(0.08, Math.max(0, (ts - lastAnimTs) / 1000));
+      lastAnimTs = ts;
+      let needsRedraw = false;
+
+      if (state.valid && el.autoRotate.checked && !state.isDragging3D) {
+        const cur = Number(el.rotY.value);
+        let next = cur + 24 * dt;
+        if (next > 180) next -= 360;
+        el.rotY.value = String(next);
+        needsRedraw = true;
+      }
+
+      if (needsRedraw) draw3D();
+      requestAnimationFrame(animate);
+    }
+
+    rebuildModel();
+    requestAnimationFrame(animate);
+  </script>
+</body>
+</html>
