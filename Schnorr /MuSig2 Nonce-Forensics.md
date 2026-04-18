@@ -791,4 +791,13 @@ Benchmark runner:
 4. protocol-valid MuSig2 affine-линеаризация;
 5. dedup-aware и sterile data discipline.
 
-Именно это и является математической моделью системы в её текущем, доказанном и ценном состоянии.
+
+
+[1]: https://github.com/bitcoin/bips/blob/master/bip-0340.mediawiki?utm_source=chatgpt.com "bips/bip-0340.mediawiki at master · bitcoin/bips"
+[2]: https://github.com/bitcoin/bips/blob/master/bip-0327.mediawiki?utm_source=chatgpt.com "bips/bip-0327.mediawiki at master · bitcoin/bips"
+[3]: https://github.com/BlockstreamResearch/secp256k1-zkp/blob/master/include/secp256k1_musig.h?utm_source=chatgpt.com "secp256k1-zkp/include/secp256k1_musig.h at master"
+[4]: https://eprint.iacr.org/2020/1261?utm_source=chatgpt.com "MuSig2: Simple Two-Round Schnorr Multi-Signatures"
+[5]: https://datatracker.ietf.org/doc/html/rfc9591?utm_source=chatgpt.com "RFC 9591 - The Flexible Round-Optimized Schnorr ..."
+[6]: https://ecc2017.cs.ru.nl/slides/ecc2017-tibouchi.pdf?utm_source=chatgpt.com "Attacks on Schnorr signatures with biased nonces"
+[7]: https://github.com/paulmillr/scure-btc-signer?utm_source=chatgpt.com "paulmillr/scure-btc-signer: Audited & minimal library ..."
+[8]: https://brink.dev/assets/files/brink-engineering-report-2025.pdf?utm_source=chatgpt.com "Engineering Impact Report 2025"
