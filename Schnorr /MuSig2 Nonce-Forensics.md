@@ -756,11 +756,7 @@ Benchmark runner:
 
 ## 16. Рекомендуемое GitHub-позиционирование
 
-Для README / GitHub description корректная формулировка такая:
-
 **Schnorr / MuSig2 Nonce-Forensics** is a research-grade affine analysis framework for BIP340 and protocol-valid MuSig2 partial signatures. It combines strict BIP340 membership validation, hidden-nonce family reconstruction, compression/connectivity metrics, protocol-valid MuSig2 linearization, and sterile benchmark data discipline.
-
-На русском:
 
 **Schnorr / MuSig2 Nonce-Forensics** — это исследовательский affine-фреймворк для анализа BIP340-подписей и protocol-valid частичных подписей MuSig2, сочетающий строгий membership bridge, реконструкцию семейства скрытых нонсов, compression/connectivity-метрики, MuSig2-линеаризацию и стерильную benchmark-дисциплину.
 
