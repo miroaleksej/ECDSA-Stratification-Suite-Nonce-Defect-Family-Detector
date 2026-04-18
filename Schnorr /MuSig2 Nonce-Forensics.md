@@ -13,30 +13,19 @@
 
 В документ **не включены** неподтверждённые claims и недоказанные recovery-утверждения. Он фиксирует только то, что уже является ценным ядром проекта.
 
----
 
-## 1. Назначение системы
+## Сравнение с ближайшими аналогами
 
-Система предназначена для анализа структурных свойств подписей **Schnorr (BIP340)** и **MuSig2 (BIP327)** с целью:
+| Аналог                                 | Что это такое                                                                                   | Что совпадает с вашей системой                                                                 | Чего у аналога нет                                                                                                                 | Вывод                                                                                                       |
+| -------------------------------------- | ----------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| **BIP340**                             | Стандарт Schnorr для secp256k1: x-only pubkeys, challenge, verification, test vectors           | Есть базовая алгебра подписи, even-Y канонизация, проверка через стандартную верификацию       | Нет forensic-пайплайна по семействам скрытых nonce-кандидатов, нет compression/connectivity-метрик, нет blind benchmark discipline | Это **фундамент**, но не аналог вашей системы ([GitHub][1])                                                 |
+| **BIP327 (MuSig2)**                    | Стандарт MuSig2: session context, partial signatures, aggregate signature                       | Есть partial signatures, session context, совместимость с BIP340                               | Нет affine-forensics слоя для анализа `k_eff(d')`, нет ранжирования кандидатов, нет dedup/blind forensic discipline                | Это **протокольный слой**, а не аналитическая система ([GitHub][2])                                         |
+| **`secp256k1-zkp` MuSig2**             | Reference/engineering library для MuSig2: pubnonce, aggnonce, session, partial sig verify/agg   | Есть protocol-valid execution path и проверка individual partial signatures                    | Нет массового forensic-анализа скрытых нонсов, нет интерпретируемых семейных метрик, нет blind corpus framework                    | Это **референсная библиотека исполнения**, а не исследовательский forensic engine ([GitHub][3])             |
+| **MuSig2 paper**                       | Академическое описание двухраундовой multisig-схемы                                             | Совпадает математический объект: ordinary Schnorr output, key aggregation, concurrent sessions | Нет operational tooling для audit/forensics, нет bridge/reporting/corpus discipline                                                | Это **схема**, а не продуктовый анализатор ([eprint.iacr.org][4])                                           |
+| **FROST / RFC 9591**                   | Двухраундовые threshold Schnorr signatures                                                      | Родство по линейности частичных вкладов и работе с nonce/sign shares                           | Это threshold-протокол другого класса; нет BIP340+MuSig2 forensic-пайплайна, нет affine hidden-nonce ranking по кандидатам секрета | Это **соседняя категория**, но не прямой аналог ([datatracker.ietf.org][5])                                 |
+| **HNP / weak-nonce literature**        | Литература по Hidden Number Problem, lattice/FFT/Bleichenbacher-атакам на biased/partial nonces | Совпадает идея: истинный ключ выявляется через структуру/смещение семейства nonce-кандидатов   | Обычно нет BIP340 membership bridge, нет MuSig2 session-aware linearization, нет reproducible audit corpora и blind hygiene        | Это **ближайший научный предок**, но не интегрированная система уровня вашего стека ([ecc2017.cs.ru.nl][6]) |
+| **Публичные BIP340/MuSig2 библиотеки** | Реализации signing/verifying для кошельков и SDK                                                | Дают совместимость, подписи, иногда partial sig verification                                   | Нет forensic ranking, нет connectivity/compression model, нет стерильного benchmark runner                                         | Это **runtime tooling**, а не forensic research platform ([GitHub][7])                                      |
 
-1. проверять строгую протокольную согласованность подписи;
-2. переводить подписи в внутреннее affine/nonce-представление;
-3. строить семейства скрытых нонсов как функции от кандидата секрета;
-4. измерять сжатие, повторяемость и локальную связность таких семейств;
-5. работать как forensic / audit engine для weak-nonce сценариев;
-6. формировать стерильные blind-корпуса с отделением public data от truth manifest.
-
-Система **не моделирует подпись как чёрный ящик**. Она моделирует подпись как набор структурных инвариантов над полем, группой точек и скрытым нонсом.
-
-Сравнение с ближайшими аналогами
-Аналог	Что это такое	Что совпадает с вашей системой	Чего у аналога нет	Вывод
-BIP340	Стандарт Schnorr для secp256k1: x-only pubkeys, challenge, verification, test vectors	Есть базовая алгебра подписи, even-Y канонизация, проверка через стандартную верификацию	Нет forensic-пайплайна по семействам скрытых nonce-кандидатов, нет compression/connectivity-метрик, нет blind benchmark discipline	Это фундамент, но не аналог вашей системы
-BIP327 (MuSig2)	Стандарт MuSig2: session context, partial signatures, aggregate signature	Есть partial signatures, session context, совместимость с BIP340	Нет affine-forensics слоя для анализа k_eff(d'), нет ранжирования кандидатов, нет dedup/blind forensic discipline	Это протокольный слой, а не аналитическая система
-secp256k1-zkp MuSig2	Reference/engineering library для MuSig2: pubnonce, aggnonce, session, partial sig verify/agg	Есть protocol-valid execution path и проверка individual partial signatures	Нет массового forensic-анализа скрытых нонсов, нет интерпретируемых семейных метрик, нет blind corpus framework	Это референсная библиотека исполнения, а не исследовательский forensic engine
-MuSig2 paper	Академическое описание двухраундовой multisig-схемы	Совпадает математический объект: ordinary Schnorr output, key aggregation, concurrent sessions	Нет operational tooling для audit/forensics, нет bridge/reporting/corpus discipline	Это схема, а не продуктовый анализатор
-FROST / RFC 9591	Двухраундовые threshold Schnorr signatures	Родство по линейности частичных вкладов и работе с nonce/sign shares	Это threshold-протокол другого класса; нет BIP340+MuSig2 forensic-пайплайна, нет affine hidden-nonce ranking по кандидатам секрета	Это соседняя категория, но не прямой аналог
-HNP / weak-nonce literature	Литература по Hidden Number Problem, lattice/FFT/Bleichenbacher-атакам на biased/partial nonces	Совпадает идея: истинный ключ выявляется через структуру/смещение семейства nonce-кандидатов	Обычно нет BIP340 membership bridge, нет MuSig2 session-aware linearization, нет reproducible audit corpora и blind hygiene	Это ближайший научный предок, но не интегрированная система уровня вашего стека
-Публичные BIP340/MuSig2 библиотеки	Реализации signing/verifying для кошельков и SDK	Дают совместимость, подписи, иногда partial sig verification	Нет forensic ranking, нет connectivity/compression model, нет стерильного benchmark runner	Это runtime tooling, а не forensic research platform
 
 ---
 
